@@ -104,17 +104,17 @@ Stockpile|储备
 Deathbed|终末
 """.Split('\n',StringSplitOptions.RemoveEmptyEntries).Select(line=>line.Trim().Split('|')).ToDictionary(parts=>parts[0],parts=>parts[1]);
  static readonly Dictionary<string,string> globalNames=new(){["divergence"]="Divergence",["mp-1"]="Mercurial Drift",["mp-2"]="Polyatomic Reforged",["mp-3"]="Orion Reforged",["dmz-1"]="Chiral",["dmz-2"]="Ripple Tide",["dmz-3"]="Helio",["wz-1"]="Parallax",["wz-2"]="Damascus Reforged",["wz-3"]="Empyros"};
- public static string WeaponEn(Weapon w)=>WeaponArt.Info(w)?.EnglishName??w.Name;
- public static string WeaponZh(Weapon w)=>WeaponArt.Info(w)?.ChineseName??w.Name;
+ public static string WeaponEn(Weapon w)=>w.EnglishName.Length>0?w.EnglishName:WeaponArt.Info(w)?.EnglishName??w.Name;
+ public static string WeaponZh(Weapon w)=>w.ChineseName.Length>0?w.ChineseName:WeaponArt.Info(w)?.ChineseName??w.Name;
  public static string WeaponPair(Weapon w){var cn=WeaponZh(w);var en=WeaponEn(w);return cn==en?cn:cn+" · "+en;}
- public static string CamoEn(Challenge c)=>c.Kind switch
+ public static string CamoEn(Challenge c)=>c.EnglishName.Length>0?c.EnglishName:c.Kind switch
  {
   "military"=>"Military Camo "+c.CatalogKey.Split('-').Last(),
   "gold"=>"Gold","platinum"=>"Platinum","harmonic"=>"Harmonic Break",
   "prestige"=>c.ArtKey switch {"pyroclast"=>"Pyroclast","terminus"=>"Pyroclast Terminus","scatter"=>"Pyroclast Scatter","cascade"=>"Pyroclast Cascade",_=>c.Name},
   _=>globalNames.GetValueOrDefault(c.CatalogKey,c.Name)
  };
- public static string CamoZh(Challenge c)=>camos.GetValueOrDefault(c.Name,c.Name);
+ public static string CamoZh(Challenge c)=>c.ChineseName.Length>0?c.ChineseName:camos.GetValueOrDefault(c.Name,c.Name);
  public static string Camo(Challenge c){var zh=CamoZh(c);var en=CamoEn(c);return zh==en?zh:zh+" · "+en;}
  public static string Stage(string stage)=>stage switch {"军事迷彩"=>"军事迷彩 / Military","特殊迷彩"=>"特殊迷彩 / Special","完美主义者"=>"完成主义 / Completionist","武器巅峰"=>"武器巅峰 / Weapon Prestige","模式精通"=>"模式精通 / Mode Mastery",_=>stage};
  public static string RuleEn(Challenge c)

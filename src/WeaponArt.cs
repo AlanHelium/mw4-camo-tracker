@@ -1,8 +1,6 @@
-using System.Reflection;
-using System.Text.Json;
 using System.Windows.Media.Imaging;
 namespace CamoTracker;
-static class WeaponArt
+public static class WeaponArt
 {
  public sealed class Entry
  {
@@ -11,20 +9,17 @@ static class WeaponArt
   public string ChineseName {get;set;}="";
   public string Image {get;set;}="";
   public int MaxLevel {get;set;}
+  public string Source {get;set;}="";
+  public string ChineseSource {get;set;}="";
  }
- static readonly Dictionary<string,Entry> entries=Read();
  static readonly Dictionary<string,BitmapSource> cache=[];
- static Dictionary<string,Entry> Read()
- {
-  using var stream=Assembly.GetExecutingAssembly().GetManifestResourceStream("CamoTracker.weapons.json")!;
-  return JsonSerializer.Deserialize<List<Entry>>(stream)!.ToDictionary(e=>e.CatalogKey);
- }
- public static Entry? Info(Weapon w)=>entries.GetValueOrDefault(w.CatalogKey);
+ public static void Clear()=>cache.Clear();
+ public static Entry? Info(Weapon w)=>DataCatalog.Active.WeaponImages.FirstOrDefault(e=>e.CatalogKey==w.CatalogKey);
  public static BitmapSource? Image(Weapon w)
  {
   var info=Info(w);if(info==null)return null;
   if(cache.TryGetValue(info.Image,out var found))return found;
-  var image=new BitmapImage();image.BeginInit();image.CacheOption=BitmapCacheOption.OnLoad;image.DecodePixelWidth=720;image.UriSource=new Uri("pack://application:,,,/Assets/Weapons/"+info.Image);image.EndInit();image.Freeze();
+  var image=new BitmapImage();image.BeginInit();image.CacheOption=BitmapCacheOption.OnLoad;image.DecodePixelWidth=720;image.UriSource=DataCatalog.Root==null?new Uri("pack://application:,,,/Assets/Weapons/"+info.Image):new Uri(DataCatalog.Asset("weapons/"+info.Image));image.EndInit();image.Freeze();
   // Bound decoded gun art instead of retaining all 33 large images.
   if(cache.Count>=8)cache.Clear();cache[info.Image]=image;return image;
  }

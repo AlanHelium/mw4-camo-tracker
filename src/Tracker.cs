@@ -12,10 +12,13 @@ public class Tracker
  public Weapon CurrentWeapon=>Data.Weapons.First(w=>w.Id==Data.SelectedWeapon);
  public Challenge Current=>CurrentWeapon.Challenges.First(c=>c.Id==Data.SelectedChallenge);
  public bool CanUndo=>history.Count>0;
+ public void AcceptUpdate(TrackerData data){Data=data;history.Clear();Normalize();Notice="资料已更新，原进度已备份";}
  public Tracker(string? path)
  {
   Path=path;Data=Catalog.Create();
-  if(path!=null&&File.Exists(path))try{Data=Parse(File.ReadAllText(path));if(Data.CatalogRevision<Catalog.Revision)File.Copy(path,path+".before-catalog-v3",true);}catch{Notice="存档损坏，已保留原文件";try{File.Copy(path,path+".damaged-"+DateTime.Now.ToString("yyyyMMddHHmmss"));}catch{}Data=Catalog.Create();}
+  bool loaded=false;
+  if(path!=null&&File.Exists(path))try{Data=Parse(File.ReadAllText(path));loaded=true;}catch{Notice="存档损坏，已保留原文件";try{File.Copy(path,path+".damaged-"+DateTime.Now.ToString("yyyyMMddHHmmss"));}catch{}Data=Catalog.Create();}
+  if(loaded&&(Data.CatalogRevision<Catalog.Revision||Data.DataRevision<DataCatalog.Active.Revision))File.Copy(path!,path+".before-data-upgrade-"+DateTime.Now.ToString("yyyyMMddHHmmssfff"),false);
   Catalog.Upgrade(Data);Normalize();
  }
  public static TrackerData Seed()=>Catalog.Create();
@@ -30,11 +33,23 @@ public class Tracker
  {
   if(json.Length>4_000_000)throw new InvalidDataException("文件超过 4 MB");var d=JsonSerializer.Deserialize<TrackerData>(json)??throw new InvalidDataException("空文件");
   if(d.Version!=1||d.Weapons==null||d.Weapons.Count is <1 or >200)throw new InvalidDataException("不支持的存档");var ids=new HashSet<string>();
-  foreach(var w in d.Weapons){if(w==null||string.IsNullOrWhiteSpace(w.Name)||w.Name.Length>80||string.IsNullOrWhiteSpace(w.Id)||!ids.Add(w.Id)||w.Challenges==null||w.Challenges.Count is <1 or >200||w.Prestige is <0 or >2||w.WeaponLevel is <0 or >1000)throw new InvalidDataException("武器数据无效");foreach(var c in w.Challenges)if(c==null||string.IsNullOrWhiteSpace(c.Name)||c.Name.Length>100||c.Rule==null||c.Rule.Length>2000||c.Source==null||c.Source.Length>2000||c.Target is <1 or >1000000||c.Count<0||c.Count>c.Target||string.IsNullOrWhiteSpace(c.Id)||!ids.Add(c.Id))throw new InvalidDataException("挑战数据无效");}return d;
+  foreach(var w in d.Weapons){if(w==null||string.IsNullOrWhiteSpace(w.Name)||w.CatalogKey==null||w.ChineseName==null||w.EnglishName==null||w.Name.Length>80||string.IsNullOrWhiteSpace(w.Id)||!ids.Add(w.Id)||w.Challenges==null||w.Challenges.Count is <1 or >200||w.Prestige is <0 or >2||w.WeaponLevel is <0 or >1000)throw new InvalidDataException("武器数据无效");foreach(var c in w.Challenges)if(c==null||string.IsNullOrWhiteSpace(c.Name)||c.CatalogKey==null||c.ChineseName==null||c.EnglishName==null||c.Unit==null||c.Kind==null||c.Stage==null||c.SourceRule==null||c.DmzRule==null||c.DmzSourceRule==null||c.Gates==null||c.Gates.Any(g=>g==null||g.Kind==null||g.Scope==null||g.ChallengeKey==null||g.Label==null)||c.Name.Length>100||c.Rule==null||c.Rule.Length>2000||c.Source==null||c.Source.Length>2000||c.Target is <1 or >1000000||c.Count<0||c.Count>c.Target||string.IsNullOrWhiteSpace(c.Id)||!ids.Add(c.Id))throw new InvalidDataException("挑战数据无效");}return d;
  }
  public void Snapshot(){if(history.Count>=100){var keep=history.Take(99).Reverse().ToArray();history.Clear();foreach(var s in keep)history.Push(s);}history.Push(JsonSerializer.Serialize(Data));}
  public void Change(int amount){Snapshot();Current.Count=(int)Math.Clamp((long)Current.Count+amount,0,Current.Target);Current.ProgressKnown=true;Save();}
  public void RecordTotal(Weapon w,Challenge c,int total){Snapshot();c.Count=Math.Clamp(total,0,c.Target);c.ProgressKnown=true;Save();}
+ public void RecordRunTotal(Weapon w,Challenge c,int total){if(Eligibility.Reason(Data,w,c) is {} reason)throw new InvalidOperationException(reason);RecordTotal(w,c,total);}
+ public void CompleteRun(Weapon w,Challenge c)
+ {
+  if(Eligibility.Reason(Data,w,c) is {} reason)throw new InvalidOperationException(reason);
+  MarkUnlocked(w,c,true);
+ }
+ public void RestoreTo(Weapon w,Challenge milestone)
+ {
+  var lane=w.Challenges.Where(c=>(c.Kind=="prestige")== (milestone.Kind=="prestige")).ToList();int index=lane.IndexOf(milestone);if(index<0)throw new InvalidOperationException("目标不属于此武器。");Snapshot();
+  for(int i=0;i<lane.Count;i++){var c=lane[i];c.Unlocked=i<=index;c.Count=c.Unlocked?c.Target:0;c.ProgressKnown=true;c.OpenConfirmed=c.Unlocked;}
+  w.FocusChallengeId="";w.OverlayChallengeId="";Save();
+ }
  public void MarkUnlocked(Weapon w,Challenge c,bool unlocked)
  {
   Snapshot();c.Unlocked=unlocked;c.Count=unlocked?c.Target:0;c.ProgressKnown=true;

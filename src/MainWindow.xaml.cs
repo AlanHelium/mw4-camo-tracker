@@ -39,7 +39,7 @@ public partial class MainWindow : Window
   Closing+=(_,_)=>{shuttingDown=true;DismissUnlock();mini?.Close();UnregisterKeys();tracker.Save();};
  }
  void Count(int amount){if(mini is {IsVisible:true}){var rows=OverlayRows().Skip(overlayPage*5).Take(5).ToList();if(rows.Count==0)return;if(!rows.Any(r=>r.weapon.Id==tracker.Data.SelectedWeapon&&r.challenge.Id==tracker.Data.SelectedChallenge))SelectOverlayRow(0);}var blocked=Eligibility.Reason(tracker.CurrentWeapon,tracker.Current);if(blocked!=null){MessageBox.Show(blocked+"。请点「武器等级」记录实际状态。","尚未满足前置");return;}if(tracker.Current.RequiredPrestige>0){MessageBox.Show("这是等级奖励，请更新武器等级；不按击杀加一。","武器巅峰迷彩");return;}tracker.Change(amount);Render();}
- void Undo(){DismissUnlock();tracker.Undo();Render();}
+ void Undo(){DismissUnlock();tracker.Undo();Render();RefreshJourney();}
  void ResetCurrent(){if(MessageBox.Show(this,"将“"+tracker.Current.Name+"”的计数归零？可撤销。","重置本项",MessageBoxButton.YesNo)==MessageBoxResult.Yes){tracker.Change(-tracker.Current.Count);Render();}}
  void AddWeapon()
  {
@@ -57,7 +57,7 @@ public partial class MainWindow : Window
   var values=Form(add?"添加挑战":"编辑当前挑战",[("迷彩名称",c.Name),("阶段",c.Stage),("挑战要求（含模式与前置条件）",c.Rule),("目标次数",c.Target.ToString()),("当前次数",c.Count.ToString())]);if(values==null)return;
   if(!int.TryParse(values[3],out var target)||target is <1 or >1000000||!int.TryParse(values[4],out var count)||count<0||count>target){MessageBox.Show(this,"目标必须为 1–1000000，当前次数必须在 0 与目标之间。请重新编辑。");return;}
   if(add && tracker.CurrentWeapon.Challenges.Count>=200){MessageBox.Show(this,"每把武器最多支持 200 项挑战。");return;}
-  tracker.Snapshot();c.ArtKey=OfficialArt.Key(c);c.Name=values[0];c.Stage=values[1];c.Rule=values[2];c.Target=target;c.Count=count;c.ProgressKnown=true;c.Source="用户自定义 / 编辑";c.RequirementUnverified=false;
+  tracker.Snapshot();c.ArtKey=OfficialArt.Key(c);c.Name=values[0];c.ChineseName="";c.EnglishName="";c.Stage=values[1];c.Rule=values[2];c.Target=target;c.Count=count;c.ProgressKnown=true;c.Source="用户自定义 / 编辑";c.RequirementUnverified=false;
   if(add)tracker.CurrentWeapon.Challenges.Add(c);tracker.Data.SelectedChallenge=c.Id;tracker.Save();Render();
  }
  string[]? Form(string title,(string label,string value)[] fields)
@@ -98,7 +98,7 @@ public partial class MainWindow : Window
  IntPtr WndProc(IntPtr hwnd,int msg,IntPtr wp,IntPtr lp,ref bool handled)
  {
   if(msg!=0x312)return IntPtr.Zero;
-  if(!IsEnabled){handled=true;return IntPtr.Zero;}
+  if(!IsEnabled||mini is {IsEnabled:false}){handled=true;return IntPtr.Zero;}
   switch(wp.ToInt32())
   {
    case 860:MarkCurrentUnlocked();break;case 862:Undo();break;case 863:ToggleMini();break;
@@ -130,7 +130,8 @@ public partial class MainWindow : Window
     CaptureHudVariants(path);CaptureMainDesigns(path);CaptureUnlockPreview(path);ShowUnlockToast(tracker.CurrentWeapon,tracker.Current,true);var toastHandle=new WindowInteropHelper(unlockToast!).Handle;if((GetWindowLongPtr(toastHandle,-20).ToInt64()&0x8000020)!=0x8000020)throw new Exception("Unlock toast must not activate or intercept input");await System.Threading.Tasks.Task.Delay(2800);if(unlockToast!=null)throw new Exception("Unlock toast did not dismiss");
     ToggleMini();var unplanned=tracker.Data.Weapons.First(w=>!tracker.InSession(w)&&w.Category!="模式精通");SelectGoal(unplanned,Recommendations.ForWeapon(tracker.Data,unplanned)!);if(tracker.CurrentWeapon.Id!=unplanned.Id)throw new Exception("Hidden HUD changed main selection");ToggleMini();if(!OverlayRows().Any(row=>row.weapon.Id==tracker.CurrentWeapon.Id&&row.challenge.Id==tracker.Current.Id))throw new Exception("Shown HUD has no active row");
     var savedPlan=tracker.Data.SessionWeapons.ToList();tracker.Data.SessionWeapons.Clear();Render();var emptyCount=tracker.Current.Count;var emptyUnlocked=tracker.Current.Unlocked;MarkCurrentUnlocked();if(tracker.Current.Count!=emptyCount||tracker.Current.Unlocked!=emptyUnlocked)throw new Exception("Empty HUD changed an unrelated goal");tracker.Data.SessionWeapons=savedPlan;Render();ToggleMini();
-    File.WriteAllText(path+".checks.txt","PASS: all gun images; classic and 3 new layouts render/select weapons; bilingual controls; shared HUD themes; hidden HUD selection and empty HUD guard; global progress; hotkeys/click-through; original donation; unlock toast lifecycle\n"+hotkeyStatus);
+    await CaptureJourneyVariants(path);var updates=CreateUpdateWindow();updates.ShowActivated=false;updates.Show();updates.UpdateLayout();if(!HasText(updates,"资料更新")||!HasText(updates,"检查更新")||!HasText(updates,"导入离线包"))throw new Exception("Data update controls missing");var updateImage=new RenderTargetBitmap((int)updates.ActualWidth,(int)updates.ActualHeight,96,96,PixelFormats.Pbgra32);updateImage.Render(updates);SavePng(updateImage,System.IO.Path.ChangeExtension(path,"updates.png"));updates.Close();
+    File.WriteAllText(path+".checks.txt","PASS: all gun images; classic and 3 new layouts render/select weapons; bilingual controls; shared HUD themes; hidden HUD selection and empty HUD guard; global progress; hotkeys/click-through; original donation; unlock toast lifecycle; update dialog controls; actual journey node selection / locked Platinum actions / expanded HUD\n"+hotkeyStatus);
    }catch(Exception ex){File.WriteAllText(path+".checks.txt","FAIL: "+ex);}
    Application.Current.Shutdown();
   }));

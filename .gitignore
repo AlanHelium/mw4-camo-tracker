@@ -13,4 +13,6 @@ tools/
 /performance-local.json
 **/test-results.txt
 **/runtime-error.txt
+**/data-results.txt
+**/feed-results.txt
 __pycache__/

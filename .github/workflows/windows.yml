@@ -23,3 +23,4 @@ jobs:
           path: |
             release/CamoTracker.exe
             release/test-results.txt
+            release/data-results.txt

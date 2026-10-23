@@ -7,3 +7,5 @@ Call of Duty, Modern Warfare and related names, images and marks are owned by Ac
 `donation.png` is the author's supplied donation artwork, shared with the author's authorization for display in this project; it is not covered by the source-code MIT license.
 
 Challenge facts were compiled with attribution from `docs/DATA.md`. No third-party tracker implementation or synthetic artwork has been included.
+
+作者署名：Burrito（GitHub：AlanHelium）。赞赏自愿，全部功能免费。

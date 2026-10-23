@@ -9,15 +9,20 @@ public partial class MainWindow
  void SetToday(Weapon w,bool selected){try{tracker.SetSession(w,selected);}catch(InvalidOperationException e){MessageBox.Show(e.Message,"今日计划");}Render();}
  void MarkCurrentUnlocked()
  {
-  if(mini is {IsVisible:true}){if(OverlayRows().Count==0)return;EnsureOverlaySelection();}var w=tracker.CurrentWeapon;var c=tracker.Current;if(c.Done)return;tracker.MarkUnlocked(w,c,true);
-  var next=Recommendations.ForWeapon(tracker.Data,w);if(next!=null)tracker.Data.SelectedChallenge=next.Id;tracker.Save();Render();ShowUnlockToast(w,c);
+  if(mini is {IsVisible:true})
+  {
+   if(expandedWeaponId.Length>0){var viewed=tracker.Data.Weapons.FirstOrDefault(w=>w.Id==expandedWeaponId);var goal=viewed?.Challenges.FirstOrDefault(c=>c.Id==journeyChallengeId);if(viewed==null||goal==null)return;tracker.Data.SelectedWeapon=viewed.Id;tracker.Data.SelectedChallenge=goal.Id;}
+   else{if(OverlayRows().Count==0)return;EnsureOverlaySelection();}
+  }
+  var w=tracker.CurrentWeapon;var c=tracker.Current;if(c.Done)return;if(Eligibility.Reason(tracker.Data,w,c) is {} reason){MessageBox.Show(reason,"还未满足前置");return;}tracker.CompleteRun(w,c);
+  var next=Recommendations.ForWeapon(tracker.Data,w);if(next!=null){tracker.Data.SelectedChallenge=next.Id;if(expandedWeaponId==w.Id)journeyChallengeId=next.Id;}tracker.Save();Render();RefreshJourney();ShowUnlockToast(w,c);
  }
  void RecordProgress()
  {
-  var c=tracker.Current;if(c.IsLevelReward){RecordLevels();return;}
+  var c=tracker.Current;if(c.IsLevelReward){RecordLevels();return;}if(Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c) is {} reason){MessageBox.Show(reason,"还未满足前置");return;}
   var values=Form("局后更新",[("游戏内当前总进度",c.ProgressKnown?c.Count.ToString():"")]);if(values==null)return;
   if(!int.TryParse(values[0],out var count)||count<0||count>c.Target){MessageBox.Show($"请输入 0 到 {c.Target} 之间的进度。未知进度可不填写。");return;}
-  bool wasDone=c.Done;var w=tracker.CurrentWeapon;tracker.RecordTotal(w,c,count);Render();if(!wasDone&&c.Done)ShowUnlockToast(w,c);
+  bool wasDone=c.Done;var w=tracker.CurrentWeapon;tracker.RecordRunTotal(w,c,count);Render();if(!wasDone&&c.Done)ShowUnlockToast(w,c);
  }
  void ShowInventory()=>FromOverlay(()=>CreateInventoryWindow().ShowDialog());
  Window CreateInventoryWindow()
@@ -32,7 +37,7 @@ public partial class MainWindow
    {
     var line=new Grid();line.ColumnDefinitions.Add(new(){Width=new GridLength(25)});line.ColumnDefinitions.Add(new(){Width=new GridLength(65)});line.ColumnDefinitions.Add(new());line.ColumnDefinitions.Add(new(){Width=GridLength.Auto});
     {var plan=new CheckBox{IsChecked=tracker.InSession(w),VerticalAlignment=VerticalAlignment.Center,ToolTip="加入今日计划"};plan.Click+=(_,_)=>{SetToday(w,plan.IsChecked==true);ListWeapons();};Put(line,plan);}
-    Put(line,new System.Windows.Controls.Image{Source=WeaponArt.Image(w),Height=38,Width=58,Stretch=Stretch.Uniform},1);var name=Label(Bilingual.WeaponZh(w),12,White,w==active);name.TextWrapping=TextWrapping.NoWrap;name.TextTrimming=TextTrimming.CharacterEllipsis;var cn=Label(Bilingual.WeaponZh(w)==Bilingual.WeaponEn(w)?w.Category:Bilingual.WeaponEn(w),9,Muted);cn.TextWrapping=TextWrapping.NoWrap;cn.TextTrimming=TextTrimming.CharacterEllipsis;Put(line,Stack(name,cn),2);Put(line,Label(w.Challenges.Count(c=>c.Done)+"/"+w.Challenges.Count,10,Muted),3);
+    Put(line,GunThumbnail(w,58,40),1);var name=Label(Bilingual.WeaponZh(w),12,White,w==active);name.TextWrapping=TextWrapping.NoWrap;name.TextTrimming=TextTrimming.CharacterEllipsis;var cn=Label(Bilingual.WeaponZh(w)==Bilingual.WeaponEn(w)?w.Category:Bilingual.WeaponEn(w),9,Muted);cn.TextWrapping=TextWrapping.NoWrap;cn.TextTrimming=TextTrimming.CharacterEllipsis;Put(line,Stack(name,cn),2);Put(line,Label(w.Challenges.Count(c=>c.Done)+"/"+w.Challenges.Count,10,Muted),3);
     var button=Command("",()=>{active=w;tracker.Data.SelectedWeapon=w.Id;tracker.Normalize();tracker.Save();ListWeapons();Detail();Render();});button.Content=line;button.HorizontalContentAlignment=HorizontalAlignment.Stretch;button.Margin=new(0,0,0,5);button.Background=B(w==active?"#29372A":Surface);weapons.Children.Add(button);
    }
   }
@@ -40,7 +45,7 @@ public partial class MainWindow
   {
    double offset=detailScroll.VerticalOffset;details.Children.Clear();
    var title=new Grid();title.ColumnDefinitions.Add(new());title.ColumnDefinitions.Add(new(){Width=GridLength.Auto});Put(title,Label(Bilingual.WeaponZh(active),24,White,true));var done=Command("完成",()=>dialog.Close(),true);done.Margin=new(0);Put(title,done,1);details.Children.Add(title);details.Children.Add(Label(Bilingual.WeaponEn(active)+" · "+active.Category,11,Muted));
-   var meta=Row(Label("已解锁 "+active.Challenges.Count(c=>c.Done)+" / "+active.Challenges.Count,11,Muted));meta.Margin=new(0,7,0,13);details.Children.Add(meta);
+   var meta=Row(Label("已解锁 "+active.Challenges.Count(c=>c.Done)+" / "+active.Challenges.Count,11,Muted));meta.Margin=new(0,7,0,13);details.Children.Add(meta);details.Children.Add(Label("补录历史 · 按游戏实际拥有情况勾选",10,Muted));details.Children.Add(JourneyRail(active,c=>{journeyChallengeId=c.Id;ShowChallengeDetails(active,c);},false,true));
    {
     var plan=new CheckBox{Content=active.Category=="模式精通"?"今天追踪此路线":"今天刷这把",IsChecked=tracker.InSession(active),Foreground=B(Acid),Margin=new(0,0,0,12)};plan.Click+=(_,_)=>{SetToday(active,plan.IsChecked==true);ListWeapons();Detail();};details.Children.Add(plan);
    }
@@ -63,7 +68,7 @@ public partial class MainWindow
       var opened=new CheckBox{Content="游戏中已开放此挑战",IsChecked=c.OpenConfirmed,Foreground=B(Muted),FontSize=10,Margin=new(0,6,0,0)};opened.Click+=(_,_)=>{tracker.Snapshot();c.OpenConfirmed=opened.IsChecked==true;tracker.Save();Detail();Render();};body.Children.Add(opened);
      }
      var tools=new StackPanel{Orientation=Orientation.Horizontal,Margin=new(0,6,0,0)};
-     var follow=Command("本局冲这个",()=>{try{tracker.SetSession(active,true);SelectGoal(active,c,true);dialog.Close();}catch(InvalidOperationException e){MessageBox.Show(e.Message);}});follow.FontSize=10;follow.Padding=new(8,5,8,5);tools.Children.Add(follow);
+     var follow=Command("本局冲这个",()=>{try{tracker.SetSession(active,true);SelectGoal(active,c,true);dialog.Close();}catch(InvalidOperationException e){MessageBox.Show(e.Message);}});follow.IsEnabled=!c.Done&&gate==null;follow.ToolTip=gate;follow.FontSize=10;follow.Padding=new(8,5,8,5);tools.Children.Add(follow);
      var more=Command("详情",()=>ShowChallengeDetails(active,c));more.FontSize=10;more.Padding=new(8,5,8,5);tools.Children.Add(more);body.Children.Add(tools);Put(card,body,1);details.Children.Add(new Border{Child=card,BorderBrush=B(Line),BorderThickness=new(0,0,0,1),Padding=new(0,4,0,7)});
     }
    }

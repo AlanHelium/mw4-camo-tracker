@@ -23,7 +23,7 @@ public partial class MainWindow
  }
  static string ColorFor(Challenge c)=>c.RequiredPrestige>0?"#B9A0EB":OfficialArt.Key(c)=="gold"?"#E9C36D":c.IsPreparation?"#DDAD69":"#73C9BC";
  string StateFor(Weapon w,Challenge c)=>c.Done?"已解锁":Eligibility.Reason(tracker.Data,w,c)!=null?c.RequirementUnverified?"待核对":"待前置":c.IsLevelReward?"等级奖励":c.ProgressKnown?"差 "+(c.Target-c.Count):"未录进度";
- static string ShortName(Challenge c)=>c.Kind=="military"?$"军事 Lv.{c.RequiredWeaponLevel} · Military":Bilingual.Camo(c);
+ static string ShortName(Challenge c)=>c.Kind=="military"?$"军用迷彩 · 武器 Lv.{c.RequiredWeaponLevel}":Bilingual.Camo(c);
  void Render()
  {
   ApplyMainDesign();if(tracker.Data.MainDesign!="classic"){RenderDesigned();RefreshMini();return;}
@@ -51,7 +51,7 @@ public partial class MainWindow
   right.Children.Add(Label(Bilingual.Camo(current),13,ColorFor(current)));
   var art=new Grid{Height=150,Margin=new(0,12,0,12)};art.ColumnDefinitions.Add(new());art.ColumnDefinitions.Add(new(){Width=new GridLength(10)});art.ColumnDefinitions.Add(new(){Width=new GridLength(144)});
   var gun=new Grid{Background=B("#0B100F"),ClipToBounds=true};var gunImage=WeaponArt.Image(weapon);gun.Children.Add(new Image{Source=gunImage,Stretch=Stretch.Uniform,Margin=new(3,5,3,20)});if(gunImage==null)gun.Children.Add(Label("暂无对应枪型",11,Muted));var gunLabel=Label("原厂枪型 / BASE WEAPON",9,Muted);gunLabel.VerticalAlignment=VerticalAlignment.Bottom;gunLabel.Margin=new(10,0,0,8);gun.Children.Add(gunLabel);Put(art,gun);
-  var camoRef=new Grid{Background=B("#0B100F"),ClipToBounds=true};var picture=OfficialArt.Image(OfficialArt.Key(current));camoRef.Children.Add(new Image{Source=picture,Stretch=Stretch.UniformToFill});if(picture==null){var absent=Label("暂无迷彩配图",10,Muted);absent.VerticalAlignment=VerticalAlignment.Center;absent.HorizontalAlignment=HorizontalAlignment.Center;camoRef.Children.Add(absent);}camoRef.Children.Add(new Border{Background=new LinearGradientBrush(Color.FromArgb(0,0,0,0),Color.FromArgb(210,8,13,10),90)});var refLabel=Label(picture==null?"迷彩外观 / CAMO":"迷彩参考 · HAN 86",9,"#D1D7CE");refLabel.VerticalAlignment=VerticalAlignment.Bottom;refLabel.Margin=new(8,0,0,8);camoRef.Children.Add(refLabel);
+  var camoRef=new Grid{Background=B("#0B100F"),ClipToBounds=true};var picture=OfficialArt.Image(OfficialArt.Key(current));camoRef.Children.Add(new Image{Source=picture,Stretch=Stretch.UniformToFill});if(picture==null){var absent=Label("暂无迷彩配图",10,Muted);absent.VerticalAlignment=VerticalAlignment.Center;absent.HorizontalAlignment=HorizontalAlignment.Center;camoRef.Children.Add(absent);}camoRef.Children.Add(new Border{Background=new LinearGradientBrush(Color.FromArgb(0,0,0,0),Color.FromArgb(210,8,13,10),90)});var refLabel=Label(picture==null?"迷彩外观 / CAMO":OfficialArt.Caption(OfficialArt.Key(current)),9,"#D1D7CE");refLabel.VerticalAlignment=VerticalAlignment.Bottom;refLabel.Margin=new(8,0,0,8);camoRef.Children.Add(refLabel);
   var artButton=Command("",()=>{if(OfficialArt.Image(OfficialArt.Key(current))!=null)ShowArt(OfficialArt.Key(current));else ChooseArt();});artButton.Content=camoRef;artButton.Padding=new(0);artButton.Margin=new(0);artButton.HorizontalContentAlignment=HorizontalAlignment.Stretch;artButton.ToolTip="官方迷彩样式参考，示例枪身为 HAN 86；左侧为当前武器的实际原厂枪型。";Put(art,artButton,2);right.Children.Add(art);
   var gate=Eligibility.Reason(tracker.Data,weapon,current);
   var description=current.IsPreparation?"完成全部军事与特殊迷彩":current.Rule.Split('。')[0].Replace("多人模式：","");
@@ -63,13 +63,13 @@ public partial class MainWindow
   var target=Label(current.IsLevelReward?"等级奖励":"/ "+current.Target,15,Muted);target.VerticalAlignment=VerticalAlignment.Bottom;target.Margin=new(0,0,0,5);Put(count,target,1);right.Children.Add(count);
   right.Children.Add(Progress(current,1));
   var controls=Row(Command(current.Done?"已解锁 ✓":"标记已解锁",MarkCurrentUnlocked,true),Command("补录进度",()=>RecordProgress()),Command("↶",Undo));controls.Margin=new(0,15,0,0);
-  ((Button)controls.Children[0]).MinWidth=145;((Button)controls.Children[0]).IsEnabled=!current.Done;((Button)controls.Children[2]).IsEnabled=tracker.CanUndo;
+  ((Button)controls.Children[0]).MinWidth=145;((Button)controls.Children[0]).IsEnabled=!current.Done&&gate==null;((Button)controls.Children[0]).ToolTip=gate;((Button)controls.Children[1]).IsEnabled=current.IsLevelReward||gate==null;((Button)controls.Children[2]).IsEnabled=tracker.CanUndo;
   right.Children.Add(controls);
-  var today=new CheckBox{Content="今天刷这把",IsChecked=tracker.InSession(weapon),Foreground=B(Acid),Margin=new(0,14,0,0)};today.Click+=(_,_)=>SetToday(weapon,today.IsChecked==true);right.Children.Add(today);
+  var today=new CheckBox{Content="今天刷这把",IsChecked=tracker.InSession(weapon),Foreground=B(Acid),Margin=new(0,14,0,0)};today.Click+=(_,_)=>SetToday(weapon,today.IsChecked==true);right.Children.Add(Row(today,Command("武器路线",()=>ShowWeaponJourney(weapon))));
   Put(body,new ScrollViewer{Content=right,VerticalScrollBarVisibility=ScrollBarVisibility.Auto},2);Put(Shell,body,0,1);
   var footer=new Grid{Margin=new(24,0,17,0)};footer.ColumnDefinitions.Add(new());footer.ColumnDefinitions.Add(new(){Width=GridLength.Auto});
   var saved=Label(tracker.Notice.Contains("失败")?"● 保存失败":"● 已保存",10,tracker.Notice.Contains("失败")?"#E9A882":Muted);saved.ToolTip=tracker.Notice+"\n"+hotkeyStatus;Put(footer,saved);
-  var support=Command("赞赏作者",ShowSupport);support.Background=Brushes.Transparent;support.Foreground=B(Muted);support.Padding=new(0);Put(footer,support,1);Put(Shell,footer,0,2);RefreshMini();
+  var support=Command(Branding.Author+" · 赞赏作者",ShowSupport);support.Background=Brushes.Transparent;support.Foreground=B(Muted);support.Padding=new(0);Put(footer,support,1);Put(Shell,footer,0,2);RefreshMini();
  }
  UIElement Progress(Challenge c,double opacity)
  {
@@ -80,7 +80,7 @@ public partial class MainWindow
   bool active=w.Id==tracker.Data.SelectedWeapon&&c.Id==tracker.Data.SelectedChallenge;
   var grid=new Grid();grid.ColumnDefinitions.Add(new(){Width=new GridLength(25)});grid.ColumnDefinitions.Add(new(){Width=new GridLength(main?78:88)});grid.ColumnDefinitions.Add(new());grid.ColumnDefinitions.Add(new(){Width=new GridLength(54)});
   if(main){var selected=new CheckBox{IsChecked=tracker.InSession(w),VerticalAlignment=VerticalAlignment.Center,ToolTip="加入今天的计划"};selected.Click+=(_,_)=>SetToday(w,selected.IsChecked==true);Put(grid,selected);}else{var n=Label((index+1).ToString("D2"),11,active?Acid:Muted,true);n.FontFamily=new("Bahnschrift");n.VerticalAlignment=VerticalAlignment.Center;Put(grid,n);}
-  var art=WeaponArt.Image(w);UIElement pic=art==null?Label(w.Category=="模式精通"?"MASTERY":"—",9,ColorFor(c),true):new Image{Source=art,Stretch=Stretch.Uniform};Put(grid,new Border{Child=pic,Width=main?70:80,Height=42,ClipToBounds=true,VerticalAlignment=VerticalAlignment.Center,ToolTip=Bilingual.WeaponZh(w)+" / "+Bilingual.WeaponEn(w)},1);
+  Put(grid,GunThumbnail(w,main?70:80,46),1);
   var name=Label(Bilingual.WeaponZh(w),13,White,true);name.TextWrapping=TextWrapping.NoWrap;name.TextTrimming=TextTrimming.CharacterEllipsis;
   var sub=Label(ShortName(c),10,ColorFor(c));sub.TextWrapping=TextWrapping.NoWrap;sub.TextTrimming=TextTrimming.CharacterEllipsis;
   var content=new StackPanel();content.Children.Add(name);if(Bilingual.WeaponZh(w)!=Bilingual.WeaponEn(w)){var englishName=Label(Bilingual.WeaponEn(w),10,Muted);englishName.TextWrapping=TextWrapping.NoWrap;englishName.TextTrimming=TextTrimming.CharacterEllipsis;englishName.Margin=new(0,1,0,0);content.Children.Add(englishName);}content.Children.Add(new Border{Height=4});content.Children.Add(sub);content.Children.Add(new Border{Height=7});content.Children.Add(Progress(c,.8));content.Margin=new(0,0,8,0);Put(grid,content,2);
@@ -91,21 +91,25 @@ public partial class MainWindow
  void RefreshMini()
  {
   if(mini==null)return;var all=OverlayRows();var rows=all.Skip(overlayPage*5).Take(5).ToList();
-  if(mini.IsVisible&&overlayTier=="自动推荐"&&rows.Count>0&&!rows.Any(r=>r.weapon.Id==tracker.Data.SelectedWeapon&&r.challenge.Id==tracker.Data.SelectedChallenge)){tracker.Data.SelectedWeapon=rows[0].weapon.Id;tracker.Data.SelectedChallenge=rows[0].challenge.Id;tracker.Save();}
-  var panel=new StackPanel{Width=376,Margin=new(12)};
+  if(mini.IsVisible&&expandedWeaponId.Length==0&&overlayTier=="自动推荐"&&rows.Count>0&&!rows.Any(r=>r.weapon.Id==tracker.Data.SelectedWeapon&&r.challenge.Id==tracker.Data.SelectedChallenge)){tracker.Data.SelectedWeapon=rows[0].weapon.Id;tracker.Data.SelectedChallenge=rows[0].challenge.Id;tracker.Save();}
+  var panel=new StackPanel{Width=expandedWeaponId.Length>0?450:376,Margin=new(12)};
   var top=new Grid{Margin=new(2,1,0,12),Background=Brushes.Transparent,Cursor=Cursors.SizeAll};top.ColumnDefinitions.Add(new());top.ColumnDefinitions.Add(new(){Width=GridLength.Auto});
   var title=Brand(18);Put(top,title);var menu=Command("···",ShowHudMenu);menu.Padding=new(6,0,6,0);menu.Background=Brushes.Transparent;menu.Margin=new(0);Put(top,menu,1);top.MouseLeftButtonDown+=(_,e)=>{if(!overlayLocked&&e.LeftButton==MouseButtonState.Pressed){mini.DragMove();e.Handled=true;}};panel.Children.Add(top);
+  if(expandedWeaponId.Length>0&&!overlayLocked){panel.Children.Add(HudJourney());}
+  else
+  {
   var mode=Label(overlayTier=="自动推荐"?tracker.Data.SessionConfigured?$"今日计划 / {all.Count:D2}":"推荐目标 / 05":"目标 / "+overlayTier.ToUpperInvariant(),10,Acid,true);mode.Margin=new(2,0,0,10);panel.Children.Add(mode);
-  for(int i=0;i<rows.Count;i++){int index=i;panel.Children.Add(QueueRow(rows[i].weapon,rows[i].challenge,i,false,()=>SelectOverlayRow(index)));}
+  for(int i=0;i<rows.Count;i++){int index=i;panel.Children.Add(QueueRow(rows[i].weapon,rows[i].challenge,i,false,()=>OpenHudWeapon(index)));}
   if(rows.Count==0)panel.Children.Add(Label("暂无目标",13,Muted));
   if(!overlayLocked)
   {
-   var controls=Row(Command("已解锁 ✓",MarkCurrentUnlocked,true),Command("局后更新",()=>FromOverlay(RecordProgress)),Command("↶",Undo));controls.Margin=new(0,8,0,0);((Button)controls.Children[0]).MinWidth=115;((Button)controls.Children[0]).IsEnabled=rows.Count>0;((Button)controls.Children[1]).IsEnabled=rows.Count>0;((Button)controls.Children[2]).IsEnabled=tracker.CanUndo;panel.Children.Add(controls);
+   var controls=Row(Command("已解锁 ✓",MarkCurrentUnlocked,true),Command("局后更新",()=>FromOverlay(RecordProgress)),Command("↶",Undo));controls.Margin=new(0,8,0,0);((Button)controls.Children[0]).MinWidth=115;((Button)controls.Children[0]).IsEnabled=rows.Count>0&&!tracker.Current.Done&&Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,tracker.Current)==null;((Button)controls.Children[0]).ToolTip=Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,tracker.Current);((Button)controls.Children[1]).IsEnabled=rows.Count>0&&(tracker.Current.IsLevelReward||Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,tracker.Current)==null);((Button)controls.Children[2]).IsEnabled=tracker.CanUndo;panel.Children.Add(controls);
    if(all.Count>5){var paging=Row(Command("‹",()=>{overlayPage--;SelectOverlayRow(0);RefreshMini();}),Label($"{overlayPage+1} / {(all.Count+4)/5}",11),Command("›",()=>{overlayPage++;SelectOverlayRow(0);RefreshMini();}));paging.Margin=new(0,8,0,0);panel.Children.Add(paging);}
+  }
   }
   var hint=Label(overlayLocked?lockShortcut+" 解锁":"Ctrl+Alt+Enter 已解锁   ·   "+lockShortcut+" 锁定",9,Muted);hint.Margin=new(2,11,0,1);panel.Children.Add(hint);
   var color=(Color)ColorConverter.ConvertFromString(Ink);color.A=(byte)(Math.Clamp(tracker.Data.OverlayOpacity,.2,.95)*255);
-  mini.Content=new Border{Child=panel,Background=new SolidColorBrush(color),BorderBrush=B(Line),BorderThickness=new(1),CornerRadius=DesignRadius,LayoutTransform=new ScaleTransform(Math.Clamp(tracker.Data.OverlayScale,.65,1.4),Math.Clamp(tracker.Data.OverlayScale,.65,1.4))};
+  mini.Content=new Border{Child=new ScrollViewer{Content=panel,MaxHeight=Math.Max(360,(SystemParameters.WorkArea.Height-110)/Math.Clamp(tracker.Data.OverlayScale,.65,1.4)),VerticalScrollBarVisibility=ScrollBarVisibility.Auto,HorizontalScrollBarVisibility=ScrollBarVisibility.Disabled},Background=new SolidColorBrush(color),BorderBrush=B(Line),BorderThickness=new(1),CornerRadius=DesignRadius,LayoutTransform=new ScaleTransform(Math.Clamp(tracker.Data.OverlayScale,.65,1.4),Math.Clamp(tracker.Data.OverlayScale,.65,1.4))};
  }
  void SkipWeapon(){skippedWeapons.Add(tracker.CurrentWeapon.Id);SelectOverlayRow(0);Render();}
  void ShowWeaponMenu(){var menu=new ContextMenu();foreach(var w in tracker.Data.Weapons){var item=new MenuItem{Header=Bilingual.WeaponPair(w)};item.Click+=(_,_)=>{tracker.Data.SelectedWeapon=w.Id;tracker.Normalize();tracker.Save();Render();};menu.Items.Add(item);}menu.IsOpen=true;}
@@ -113,7 +117,7 @@ public partial class MainWindow
  void ShowHudMenu()
  {
   var menu=new ContextMenu();void Item(string s,Action action){var i=new MenuItem{Header=s};i.Click+=(_,_)=>action();menu.Items.Add(i);}
-  Item(mini is {IsVisible:true}?"返回主界面":"打开游戏小窗",ToggleMini);Item("主界面设计",ShowDesignMenu);Item("全局进度",ShowGlobalProgress);Item("迷彩路线",ShowTierMenu);Item("武器等级",()=>FromOverlay(RecordLevels));Item("添加武器",()=>FromOverlay(AddWeapon));Item("添加挑战",()=>FromOverlay(()=>EditChallenge(true)));Item("编辑当前挑战",()=>FromOverlay(()=>EditChallenge(false)));Item("迷彩配图",()=>FromOverlay(ChooseArt));Item("重置本项",()=>FromOverlay(ResetCurrent));
+  Item(mini is {IsVisible:true}?"返回主界面":"打开游戏小窗",ToggleMini);Item("资料更新",ShowDataUpdates);Item("主界面设计",ShowDesignMenu);Item("全局进度",ShowGlobalProgress);Item("迷彩路线",ShowTierMenu);Item("武器等级",()=>FromOverlay(RecordLevels));Item("添加武器",()=>FromOverlay(AddWeapon));Item("添加挑战",()=>FromOverlay(()=>EditChallenge(true)));Item("编辑当前挑战",()=>FromOverlay(()=>EditChallenge(false)));Item("迷彩配图",()=>FromOverlay(ChooseArt));Item("重置本项",()=>FromOverlay(ResetCurrent));
   menu.Items.Add(new Separator());Item("恢复自动推荐",()=>{tracker.Snapshot();skippedWeapons.Clear();tracker.Data.SessionWeapons.Clear();tracker.Data.SessionConfigured=false;foreach(var w in tracker.Data.Weapons)w.FocusChallengeId="";overlayTier="自动推荐";tracker.Save();SelectOverlayRow(0);Render();});Item("导入存档",()=>FromOverlay(Import));Item("导出备份",()=>FromOverlay(Export));
   var pin=new MenuItem{Header="主窗口置顶",IsCheckable=true,IsChecked=Topmost};pin.Click+=(_,_)=>{Topmost=pin.IsChecked;tracker.Data.Topmost=Topmost;tracker.Save();};menu.Items.Add(pin);
   Item(overlayLocked?"解锁小窗":"锁定小窗 / 鼠标穿透",ToggleOverlayLock);
@@ -125,7 +129,7 @@ public partial class MainWindow
  Window CreateSupportWindow()
  {
   var dialog=new Window{Title="赞赏作者",Width=470,Height=580,Owner=this,Background=B(Ink),Foreground=B(White),FontFamily=FontFamily,WindowStartupLocation=WindowStartupLocation.CenterOwner,ResizeMode=ResizeMode.NoResize};dialog.Resources=Resources;
-  var panel=new StackPanel{Margin=new(24)};panel.Children.Add(Label("赞赏作者",23,White,true));panel.Children.Add(new Border{Height=12});panel.Children.Add(new Image{Source=new BitmapImage(new Uri("pack://application:,,,/Assets/donation.png")),Height=390,Stretch=Stretch.Uniform});var note=Label("自愿支持，全部功能免费。",12,Muted);note.Margin=new(0,16,0,0);panel.Children.Add(note);dialog.Content=panel;dialog.SourceInitialized+=(_,_)=>DarkTitle(dialog);return dialog;
+  var panel=new StackPanel{Margin=new(24)};panel.Children.Add(Label("Burrito · 迷彩猎手",23,White,true));panel.Children.Add(Label("如果这个工具帮到了你，欢迎赞赏支持后续维护。",11,Muted));panel.Children.Add(new Border{Height=12});panel.Children.Add(new Image{Source=new BitmapImage(new Uri("pack://application:,,,/Assets/donation.png")),Height=390,Stretch=Stretch.Uniform});var note=Label("作者 Burrito · 赞赏自愿，全部功能免费。",12,Muted);note.Margin=new(0,16,0,0);panel.Children.Add(note);dialog.Content=panel;dialog.SourceInitialized+=(_,_)=>DarkTitle(dialog);return dialog;
  }
  void ShowSupport()=>FromOverlay(()=>CreateSupportWindow().ShowDialog());
  void CaptureHudVariants(string path)

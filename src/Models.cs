@@ -1,6 +1,11 @@
 namespace CamoTracker;
 public class Challenge
 {
+ public string ChineseName {get;set;}="";
+ public string EnglishName {get;set;}="";
+ public int ProgressRevision {get;set;}=1;
+ public string Unit {get;set;}="次";
+ public List<CatalogGate> Gates {get;set;}=[];
  public string Id {get;set;}=Guid.NewGuid().ToString();
  public string CatalogKey {get;set;}="";
  public string Name {get;set;}="自定义迷彩";
@@ -31,6 +36,8 @@ public class Challenge
 }
 public class Weapon
 {
+ public string ChineseName {get;set;}="";
+ public string EnglishName {get;set;}="";
  public string Id {get;set;}=Guid.NewGuid().ToString();
  public string CatalogKey {get;set;}="";
  public string Name {get;set;}="自定义武器";
@@ -48,6 +55,7 @@ public class Weapon
 }
 public class TrackerData
 {
+ public long DataRevision {get;set;}
  public int Version {get;set;}=1;
  public int CatalogRevision {get;set;}
  public List<Weapon> Weapons {get;set;}=[];

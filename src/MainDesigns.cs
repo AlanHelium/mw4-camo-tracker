@@ -46,7 +46,7 @@ public partial class MainWindow
  {
   var grid=new Grid{Margin=new(24,0,17,0)};grid.ColumnDefinitions.Add(new());grid.ColumnDefinitions.Add(new(){Width=GridLength.Auto});
   var name=Designs.First(d=>d.key==tracker.Data.MainDesign).title;var state=Label("● "+(tracker.Notice.Contains("失败")?"保存失败":"已保存")+"     /     "+name,10,Muted);state.VerticalAlignment=VerticalAlignment.Center;Put(grid,state);
-  var support=Command("赞赏作者",ShowSupport);support.Background=Brushes.Transparent;support.Foreground=B(Muted);support.Padding=new(0);Put(grid,support,1);return grid;
+  var support=Command(Branding.Author+" · 赞赏作者",ShowSupport);support.Background=Brushes.Transparent;support.Foreground=B(Muted);support.Padding=new(0);Put(grid,support,1);return grid;
  }
  void RenderDesigned()
  {
@@ -71,8 +71,8 @@ public partial class MainWindow
  UIElement CamoReference(Challenge c)
  {
   var key=OfficialArt.Key(c);var image=OfficialArt.Image(key);var row=new Grid();row.ColumnDefinitions.Add(new(){Width=new GridLength(64)});row.ColumnDefinitions.Add(new());
-  Put(row,new Image{Source=image,Height=38,Width=54,Stretch=Stretch.UniformToFill});var text=Stack(OneLine(image==null?"迷彩图片待补充":"迷彩参考 · HAN 86",10,Muted),OneLine("CAMO REFERENCE  ↗",8,Muted));text.VerticalAlignment=VerticalAlignment.Center;Put(row,text,1);
-  var button=Command("",()=>{if(image!=null)ShowArt(key);else ChooseArt();});button.Content=row;button.HorizontalContentAlignment=HorizontalAlignment.Stretch;button.Background=Brushes.Transparent;button.Padding=new(0);button.Margin=new(0);button.ToolTip="仅迷彩样式参考；不把 HAN 86 的图片当作其他武器涂装。";return button;
+  Put(row,new Image{Source=image,Height=38,Width=54,Stretch=Stretch.UniformToFill});var text=Stack(OneLine(image==null?"迷彩图片待补充":OfficialArt.Caption(key),10,Muted),OneLine("CAMO REFERENCE  ↗",8,Muted));text.VerticalAlignment=VerticalAlignment.Center;Put(row,text,1);
+  var button=Command("",()=>{if(image!=null)ShowArt(key);else ChooseArt();});button.Content=row;button.HorizontalContentAlignment=HorizontalAlignment.Stretch;button.Background=Brushes.Transparent;button.Padding=new(0);button.Margin=new(0);button.ToolTip=OfficialArt.Caption(key);return button;
  }
  UIElement TaskRules(Weapon w,Challenge c)
  {
@@ -80,9 +80,9 @@ public partial class MainWindow
  }
  UIElement TaskActions(bool compact=false)
  {
-  var c=tracker.Current;var panel=new StackPanel();var row=Row(Command(c.Done?"已解锁 ✓":"标记已解锁",MarkCurrentUnlocked,true),Command("局后更新",RecordProgress),Command("↶",Undo));((Button)row.Children[0]).IsEnabled=!c.Done;((Button)row.Children[2]).IsEnabled=tracker.CanUndo;
+  var c=tracker.Current;var panel=new StackPanel();var row=Row(Command(c.Done?"已解锁 ✓":"标记已解锁",MarkCurrentUnlocked,true),Command("局后更新",RecordProgress),Command("↶",Undo));((Button)row.Children[0]).IsEnabled=!c.Done&&Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c)==null;((Button)row.Children[0]).ToolTip=Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c);((Button)row.Children[1]).IsEnabled=c.IsLevelReward||Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c)==null;((Button)row.Children[2]).IsEnabled=tracker.CanUndo;
   if(compact)foreach(var button in row.Children.OfType<Button>()){button.FontSize=11;button.Padding=new(10,9,10,9);button.Margin=new(0,0,5,0);}panel.Children.Add(row);
-  var w=tracker.CurrentWeapon;var today=new CheckBox{Content="今天刷这把",IsChecked=tracker.InSession(w),Foreground=B(Acid),Margin=new(0,11,0,0)};today.Click+=(_,_)=>SetToday(w,today.IsChecked==true);panel.Children.Add(today);return panel;
+  var w=tracker.CurrentWeapon;var today=new CheckBox{Content="今天刷这把",IsChecked=tracker.InSession(w),Foreground=B(Acid),Margin=new(0,11,0,0)};today.Click+=(_,_)=>SetToday(w,today.IsChecked==true);panel.Children.Add(Row(today,Command("武器路线",()=>ShowWeaponJourney(w))));return panel;
  }
  UIElement NumericProgress(Challenge c,double size=36)
  {
@@ -104,11 +104,11 @@ public partial class MainWindow
   var top=new Grid();top.ColumnDefinitions.Add(new());top.ColumnDefinitions.Add(new(){Width=GridLength.Auto});var check=new CheckBox{Content=tracker.InSession(w)?"今日":"加入今日",IsChecked=tracker.InSession(w),Foreground=B(active?Acid:Muted),FontSize=9};check.Click+=(_,_)=>SetToday(w,check.IsChecked==true);Put(top,check);var value=OneLine(c.Done?"✓":ProgressSummary.Percent(c) is {} p?Pct(p):"—",10,active?Acid:Muted,true);Put(top,value,1);root.Children.Add(top);
   if(arena)
   {
-   var headline=new Grid{Margin=new(0,8,0,8)};headline.ColumnDefinitions.Add(new());headline.ColumnDefinitions.Add(new(){Width=new GridLength(89)});Put(headline,Stack(OneLine(Bilingual.WeaponZh(w),13,White,true),OneLine(Bilingual.WeaponEn(w),9,Muted)));Put(headline,new Image{Source=WeaponArt.Image(w),Height=38,Width=84,Stretch=Stretch.Uniform},1);root.Children.Add(headline);
+   var headline=new Grid{Margin=new(0,8,0,8)};headline.ColumnDefinitions.Add(new());headline.ColumnDefinitions.Add(new(){Width=new GridLength(89)});Put(headline,Stack(OneLine(Bilingual.WeaponZh(w),13,White,true),OneLine(Bilingual.WeaponEn(w),9,Muted)));Put(headline,GunThumbnail(w,84,40),1);root.Children.Add(headline);
   }
   else
   {
-   root.Children.Add(new Image{Source=WeaponArt.Image(w),Height=43,Stretch=Stretch.Uniform,Margin=new(0,3,0,3)});root.Children.Add(OneLine(Bilingual.WeaponZh(w),12,White,true));root.Children.Add(OneLine(Bilingual.WeaponEn(w),9,Muted));
+   root.Children.Add(GunThumbnail(w,130,46));root.Children.Add(OneLine(Bilingual.WeaponZh(w),12,White,true));root.Children.Add(OneLine(Bilingual.WeaponEn(w),9,Muted));
   }
   root.Children.Add(OneLine(ShortName(c),10,ColorFor(c)));var bar=Progress(c,.9);bar.SetValue(MarginProperty,new Thickness(0,7,0,0));root.Children.Add(bar);
   var button=Command("",()=>SelectGoal(w,c));button.Tag="weapon-"+w.Id;button.Content=root;button.Padding=new(arena?12:10);button.Margin=new(0,0,8,arena?8:0);button.HorizontalContentAlignment=HorizontalAlignment.Stretch;button.VerticalContentAlignment=VerticalAlignment.Stretch;button.Background=active?new SolidColorBrush(DesignTint(.15)):B("#19211F");button.ToolTip=Bilingual.WeaponPair(w)+"\n"+Bilingual.Camo(c)+"\n"+Bilingual.Rule(c);return button;

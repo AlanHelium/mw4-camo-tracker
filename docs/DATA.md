@@ -1,6 +1,6 @@
 # 数据来源与范围
 
-整理日期：2026-10-23。应用离线加载 `src/Data/catalog.json`，单项保留资料来源。
+整理日期：2026-10-23。v0.7.0 起应用内置 `data/catalog.json`，支持独立资料包覆盖；单项保留资料来源。旧的 `src/Data/catalog.json` 是初始采集记录。发布和更新方法见 [资料更新](UPDATES.md)。
 
 - [Call of Duty 官方进度博客](https://www.callofduty.com/ca/en/blog/2026/10/call-of-duty-modern-warfare-4-ready-for-launch-progression-prestige)：路线、巅峰、部分挑战与外观参考。
 - [Upblazed tracker](https://upblazed.com/tools/mw4-camo-tracker)：33 把武器的公开名称与条件事实。未复制网站界面、代码或其模拟迷彩图。
@@ -22,3 +22,5 @@ v0.5.0 加入 [官方英文武器资料](https://www.callofduty.com/uk/en/blog/2
 99 个特殊迷彩的中文名为本工具参考翻译，英文原名保留用于游戏对照，不声称是官方简中翻译。已有中文的路线名沿用既有资料，英文名与条件来自原始来源字段或已核对的官方门槛。武器中文名直接采用官方简中首发资料的武器标题，官方保留 M4 等型号时原样保留，不用类别名冒充中文名。用户改写任务后不再显示旧任务的英文条件，避免错误对照。
 
 设计参考 Call of Duty 官方进度页面的路线区分、[Raycast Windows](https://www.raycast.com/windows) 的紧凑层级、[SteelSeries Sonar](https://steelseries.com/gg/sonar) 的信息优先级、[Elgato Wave Link](https://www.elgato.com/us/en/s/wave-link-app) 的主次区域。布局、交互、界面代码独立实现，未复用参考软件的图形或代码。
+
+2026-10-24 再核对：军用迷彩按武器等级奖励；武器巅峰采用官方简中「黑曜 / 暮曜 / 苔曜 / 荧曜」。官方简中与英文对 mp-2、mp-3 和三项 DMZ 大师挑战次数不一致，这些项目标记待核对，保留英文参考数值，不用于自动判断完成。

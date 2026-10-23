@@ -66,13 +66,13 @@ public partial class MainWindow
  }
  void ShowArt(string key)
  {
-  var dialog=new Window{Title="官方迷彩外观参考（HAN 86）",Width=1000,Height=640,Owner=this,WindowStartupLocation=WindowStartupLocation.CenterOwner,Background=B("#101710")};
-  var dock=new DockPanel();var label=T("图片来源：Call of Duty 官方博客 · 静态外观参考，不是可交互 3D 材质。",12,"#ADBBA5");label.Margin=new(12);DockPanel.SetDock(label,Dock.Bottom);dock.Children.Add(label);dock.Children.Add(new Image{Source=OfficialArt.Image(key,true),Stretch=Stretch.Uniform});dialog.Content=dock;dialog.ShowDialog();
+  var dialog=new Window{Title=OfficialArt.Caption(key),Width=1000,Height=640,Owner=this,WindowStartupLocation=WindowStartupLocation.CenterOwner,Background=B("#101710")};
+  var dock=new DockPanel();var label=T(OfficialArt.Caption(key)+" · 静态外观参考",12,"#ADBBA5");label.ToolTip=OfficialArt.Source(key);label.Margin=new(12);DockPanel.SetDock(label,Dock.Bottom);dock.Children.Add(label);dock.Children.Add(new Image{Source=OfficialArt.Image(key,true),Stretch=Stretch.Uniform});dialog.Content=dock;dialog.ShowDialog();
  }
  void ChooseArt()
  {
   var dialog=new Window{Title="选择迷彩配图",Width=630,Height=420,Owner=this,WindowStartupLocation=WindowStartupLocation.CenterOwner,Background=B("#111B12")};dialog.Resources=Resources;
-  var wrap=new WrapPanel{Margin=new(16)};foreach(var key in new[]{"smoke","stormwave","red","gold","platinum","harmonic","pyroclast","terminus","scatter","cascade",""})
+  var wrap=new WrapPanel{Margin=new(16)};foreach(var key in DataCatalog.Active.CamoImages.Select(x=>x.Key).Append(""))
   {
    var k=key;var b=Btn("",()=>{tracker.Snapshot();tracker.Current.ArtKey=k;tracker.Current.Source=k==""?"用户自定义":tracker.Current.Source;tracker.Save();dialog.Close();Render();});b.Width=180;b.Height=155;b.Padding=new(8);b.Margin=new(0,0,8,8);
    b.Content=Stack(new Image{Source=OfficialArt.Image(k),Height=110,Stretch=Stretch.Uniform},T(k==""?"无配图":k.ToUpperInvariant(),12));wrap.Children.Add(b);
