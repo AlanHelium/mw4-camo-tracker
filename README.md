@@ -2,7 +2,7 @@
 
 Windows 独立迷彩计划工具。选好今天刷的武器，游戏中用小窗看目标，局后统一更新进度。
 
-[下载最新版](https://github.com/AlanHelium/mw4-camo-tracker/releases/latest) · [提交问题](https://github.com/AlanHelium/mw4-camo-tracker/issues)
+[下载 v0.4.0 试用版](https://github.com/AlanHelium/mw4-camo-tracker/releases/tag/v0.4.0) · [提交问题](https://github.com/AlanHelium/mw4-camo-tracker/issues)
 
 ![主界面与游戏小窗](docs/interface.png)
 
