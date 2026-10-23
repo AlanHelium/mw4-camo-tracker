@@ -16,3 +16,13 @@ donation.png：作者提供并授权在本项目公开展示的原始赞赏码�
 SHA256: 055C8049D4B3101FAC556F58C5BA62CB6F7896E9C9738F02B403AAAE8C7A80B2
 
 官方图片版权属于 Activision 及其权利人，代码的 MIT 许可不适用于这些图片。详见根目录 NOTICE.md。
+
+## 每把武器的原厂枪型（v0.5.0）
+
+33 张来自官方首发武器介绍的卡片，按图内名称与文章标题对应，裁切原厂枪型后转为 JPEG；没有套色、生成或模拟迷彩涂装。
+来源：https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class
+中文名对照：https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class
+逐项原图 URL 与裁切坐标：`src/Data/weapons.json`（相对于仓库根目录）。
+生成脚本：`scripts/import-official-weapons.py`。下载与核对日期：2026-10-23。
+
+奖杯图标由本项目的 WPF 几何绘制。`unlock.wav` 为项目原创的 0.92 秒合成成就提示音，生成源为 `scripts/make-unlock-sound.py`；无第三方采样，未使用 PlayStation 图标、标识或音效。原创图标和音效采用本项目 MIT 许可。

@@ -36,10 +36,10 @@ public partial class MainWindow : Window
   Topmost=tracker.Data.Topmost;
   var icon=new DrawingGroup();icon.Children.Add(new GeometryDrawing(B("#142018"),null,new RectangleGeometry(new Rect(0,0,32,32),6,6)));icon.Children.Add(new GeometryDrawing(null,new Pen(B("#C5F66B"),3),Geometry.Parse("M16,5 L27,16 L16,27 L5,16 Z")));icon.Children.Add(new GeometryDrawing(B("#C5F66B"),null,new RectangleGeometry(new Rect(12,12,8,8))));Icon=new DrawingImage(icon);
   Render();SourceInitialized+=(_,_)=>{DarkTitle(this);RegisterKeys();};
-  Closing+=(_,_)=>{shuttingDown=true;mini?.Close();UnregisterKeys();tracker.Save();};
+  Closing+=(_,_)=>{shuttingDown=true;DismissUnlock();mini?.Close();UnregisterKeys();tracker.Save();};
  }
  void Count(int amount){if(mini is {IsVisible:true}){var rows=OverlayRows().Skip(overlayPage*5).Take(5).ToList();if(rows.Count==0)return;if(!rows.Any(r=>r.weapon.Id==tracker.Data.SelectedWeapon&&r.challenge.Id==tracker.Data.SelectedChallenge))SelectOverlayRow(0);}var blocked=Eligibility.Reason(tracker.CurrentWeapon,tracker.Current);if(blocked!=null){MessageBox.Show(blocked+"。请点「武器等级」记录实际状态。","尚未满足前置");return;}if(tracker.Current.RequiredPrestige>0){MessageBox.Show("这是等级奖励，请更新武器等级；不按击杀加一。","武器巅峰迷彩");return;}tracker.Change(amount);Render();}
- void Undo(){tracker.Undo();Render();}
+ void Undo(){DismissUnlock();tracker.Undo();Render();}
  void ResetCurrent(){if(MessageBox.Show(this,"将“"+tracker.Current.Name+"”的计数归零？可撤销。","重置本项",MessageBoxButton.YesNo)==MessageBoxResult.Yes){tracker.Change(-tracker.Current.Count);Render();}}
  void AddWeapon()
  {
@@ -111,7 +111,7 @@ public partial class MainWindow : Window
  }
  public void CaptureAndExit(string path)
  {
-  Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle,new Action(()=>
+  Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle,new Action(async ()=>
   {
    try{
     // Exercise actual UI event handlers against an isolated, memory-only tracker.
@@ -122,9 +122,13 @@ public partial class MainWindow : Window
     var encoder=new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(image));using(var stream=File.Create(path))encoder.Save(stream);
     ToggleMini();mini!.UpdateLayout();var miniImage=new RenderTargetBitmap((int)mini.ActualWidth,(int)mini.ActualHeight,96,96,PixelFormats.Pbgra32);miniImage.Render(mini);var miniEncoder=new PngBitmapEncoder();miniEncoder.Frames.Add(BitmapFrame.Create(miniImage));using(var stream=File.Create(System.IO.Path.ChangeExtension(path,"mini.png")))miniEncoder.Save(stream);
     ToggleOverlayLock();if((GetWindowLongPtr(new WindowInteropHelper(mini).Handle,-20).ToInt64()&0x20)==0)throw new Exception("Click-through flag failed");ToggleOverlayLock();if((GetWindowLongPtr(new WindowInteropHelper(mini).Handle,-20).ToInt64()&0x20)!=0)throw new Exception("Click-through unlock failed");
-    var choices=OverlayRows();SelectOverlayRow(1);if(tracker.CurrentWeapon.Id!=choices[1].weapon.Id)throw new Exception("Overlay selection failed");overlayTier="gold";var expected=OverlayRows()[5].weapon.Id;overlayPage=1;SelectOverlayRow(0);if(tracker.CurrentWeapon.Id!=expected)throw new Exception("Overlay paging failed");overlayTier="自动推荐";SelectOverlayRow(0);
-    CaptureHudVariants(path);
-    ToggleMini();File.WriteAllText(path+".checks.txt","PASS: official image decoding, main render, count, undo, hotkey handler, compact render, click-through lock/unlock, overlay selection, paging, unified UI, original donation asset, restore main\n"+hotkeyStatus);
+    var choices=OverlayRows();SelectOverlayRow(1);if(tracker.CurrentWeapon.Id!=choices[1].weapon.Id)throw new Exception("Overlay selection failed");
+    bool HasText(DependencyObject node,string value){if(node is TextBlock text&&text.Text==value)return true;for(int i=0;i<VisualTreeHelper.GetChildrenCount(node);i++)if(HasText(VisualTreeHelper.GetChild(node,i),value))return true;return false;}
+    SelectOverlayRow(2);UpdateLayout();mini.UpdateLayout();if(!HasText(Shell,"威尔46")||!HasText(Shell,"VEL 46")||!HasText(mini,"威尔46")||!HasText(mini,"VEL 46"))throw new Exception("Chinese and English weapon names must appear in both main and HUD");if(Title!=Branding.Title||!mini.Title.StartsWith(Branding.Title))throw new Exception("Product naming mismatch");
+    overlayTier="gold";var expected=OverlayRows()[5].weapon.Id;overlayPage=1;SelectOverlayRow(0);if(tracker.CurrentWeapon.Id!=expected)throw new Exception("Overlay paging failed");overlayTier="自动推荐";SelectOverlayRow(0);
+    foreach(var w in tracker.Data.Weapons.Where(w=>w.Category!="模式精通"))if(WeaponArt.Image(w) is not {IsFrozen:true,PixelWidth:>0})throw new Exception("Weapon art decode failed: "+w.Name);
+    CaptureHudVariants(path);CaptureUnlockPreview(path);ShowUnlockToast(tracker.CurrentWeapon,tracker.Current,true);var toastHandle=new WindowInteropHelper(unlockToast!).Handle;if((GetWindowLongPtr(toastHandle,-20).ToInt64()&0x8000020)!=0x8000020)throw new Exception("Unlock toast must not activate or intercept input");await System.Threading.Tasks.Task.Delay(2800);if(unlockToast!=null)throw new Exception("Unlock toast did not dismiss");
+    ToggleMini();File.WriteAllText(path+".checks.txt","PASS: all 33 gun images decode/freeze, official camo images, main/HUD/global dashboard render, count/undo, unlock hotkey, click-through, selection/paging, actual bilingual weapon text, original donation asset, unlock toast no-activate/pass-through/auto-dismiss, restore main\n"+hotkeyStatus);
    }catch(Exception ex){File.WriteAllText(path+".checks.txt","FAIL: "+ex);}
    Application.Current.Shutdown();
   }));

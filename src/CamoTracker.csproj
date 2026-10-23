@@ -6,10 +6,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <Version>0.4.0</Version>
-    <Product>MW4 迷彩行动台</Product>
+    <Version>0.5.0</Version>
+    <Product>MW4 迷彩猎手 / MW4 Camo Tracker</Product>
     <Description>独立的 Windows 迷彩挑战计划与游戏小窗</Description>
   </PropertyGroup>
-  <ItemGroup><Resource Include="Assets\*.png" /><EmbeddedResource Include="Data\catalog.json" LogicalName="CamoTracker.catalog.json" /></ItemGroup>
+  <ItemGroup><Resource Include="Assets\*.png" /><Resource Include="Assets\Weapons\*.jpg" /><EmbeddedResource Include="Assets\unlock.wav" LogicalName="CamoTracker.unlock.wav" /><EmbeddedResource Include="Data\catalog.json" LogicalName="CamoTracker.catalog.json" /><EmbeddedResource Include="Data\weapons.json" LogicalName="CamoTracker.weapons.json" /></ItemGroup>
 
 </Project>

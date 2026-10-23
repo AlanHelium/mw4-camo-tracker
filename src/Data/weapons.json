@@ -1,0 +1,563 @@
+[
+  {
+    "CatalogKey": "han-86",
+    "EnglishName": "Han 86",
+    "ChineseName": "汉86",
+    "ChineseOfficialName": "汉86",
+    "MaxLevel": 72,
+    "Image": "han-86.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-009.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "m4",
+    "EnglishName": "M4",
+    "ChineseName": "M4",
+    "ChineseOfficialName": "M4",
+    "MaxLevel": 72,
+    "Image": "m4.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-010.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "hyeon-burst",
+    "EnglishName": "Hyeon Burst",
+    "ChineseName": "玄铁（点射型）",
+    "ChineseOfficialName": "玄铁（点射型）",
+    "MaxLevel": 68,
+    "Image": "hyeon-burst.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-011.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "patriot-xmr",
+    "EnglishName": "Patriot XMR",
+    "ChineseName": "爱国者XMR",
+    "ChineseOfficialName": "爱国者XMR",
+    "MaxLevel": 72,
+    "Image": "patriot-xmr.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-012.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "kastov-762",
+    "EnglishName": "Kastov 762",
+    "ChineseName": "卡斯托夫762",
+    "ChineseOfficialName": "卡斯托夫762",
+    "MaxLevel": 68,
+    "Image": "kastov-762.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-013.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "oden",
+    "EnglishName": "Oden",
+    "ChineseName": "奥登",
+    "ChineseOfficialName": "奥登",
+    "MaxLevel": 65,
+    "Image": "oden.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-014.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "axion",
+    "EnglishName": "Axion",
+    "ChineseName": "阿克西恩",
+    "ChineseOfficialName": "阿克西恩",
+    "MaxLevel": 69,
+    "Image": "axion.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-015.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "cronen-squall",
+    "EnglishName": "Cronen Squall",
+    "ChineseName": "克洛南烈风",
+    "ChineseOfficialName": "克洛南烈风",
+    "MaxLevel": 67,
+    "Image": "cronen-squall.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-016.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "iso-nightshade",
+    "EnglishName": "ISO Nightshade",
+    "ChineseName": "ISO夜影",
+    "ChineseOfficialName": "ISO夜影",
+    "MaxLevel": 64,
+    "Image": "iso-nightshade.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-017.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "vel-46",
+    "EnglishName": "VEL 46",
+    "ChineseName": "威尔46",
+    "ChineseOfficialName": "威尔46",
+    "MaxLevel": 60,
+    "Image": "vel-46.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-018.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "wz-55-striga",
+    "EnglishName": "Wz.55 Striga",
+    "ChineseName": "Wz55斯崔加",
+    "ChineseOfficialName": "Wz55斯崔加",
+    "MaxLevel": 60,
+    "Image": "wz-55-striga.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-019.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "ppsh-41",
+    "EnglishName": "PPSh-41",
+    "ChineseName": "PPSh-41",
+    "ChineseOfficialName": "PPSh-41",
+    "MaxLevel": 62,
+    "Image": "ppsh-41.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-020.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "x-58-nyx",
+    "EnglishName": "X-58 Nyx",
+    "ChineseName": "X-58夜神",
+    "ChineseOfficialName": "X-58夜神",
+    "MaxLevel": 53,
+    "Image": "x-58-nyx.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-021.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "rezi-12",
+    "EnglishName": "Rezi 12",
+    "ChineseName": "雷兹12",
+    "ChineseOfficialName": "雷兹12",
+    "MaxLevel": 60,
+    "Image": "rezi-12.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-022.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "warlord",
+    "EnglishName": "Warlord",
+    "ChineseName": "战将",
+    "ChineseOfficialName": "战将",
+    "MaxLevel": 60,
+    "Image": "warlord.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-023.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "finn-lmg",
+    "EnglishName": "FiNN LMG",
+    "ChineseName": "菲恩轻机枪",
+    "ChineseOfficialName": "菲恩轻机枪",
+    "MaxLevel": 59,
+    "Image": "finn-lmg.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-024.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "type-73",
+    "EnglishName": "Type 73",
+    "ChineseName": "73式",
+    "ChineseOfficialName": "73式",
+    "MaxLevel": 65,
+    "Image": "type-73.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-025.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "apoc-338",
+    "EnglishName": "APOC-338",
+    "ChineseName": "APOC 338",
+    "ChineseOfficialName": "APOC 338",
+    "MaxLevel": 56,
+    "Image": "apoc-338.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-026.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "mar-9",
+    "EnglishName": "MAR-9",
+    "ChineseName": "MAR-9",
+    "ChineseOfficialName": "MAR-9",
+    "MaxLevel": 73,
+    "Image": "mar-9.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-027.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "oris-8-6",
+    "EnglishName": "Oris 8.6",
+    "ChineseName": "奥里斯8.6",
+    "ChineseOfficialName": "奥里斯8.6",
+    "MaxLevel": 70,
+    "Image": "oris-8-6.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-028.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "mosin-nagant",
+    "EnglishName": "Mosin-Nagant",
+    "ChineseName": "莫辛-纳甘",
+    "ChineseOfficialName": "莫辛-纳甘",
+    "MaxLevel": 69,
+    "Image": "mosin-nagant.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-029.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "kg-7-vulcan",
+    "EnglishName": "KG-7 Vulcan",
+    "ChineseName": "KG-7火神",
+    "ChineseOfficialName": "KG-7火神",
+    "MaxLevel": 75,
+    "Image": "kg-7-vulcan.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-030.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "astaroth-57",
+    "EnglishName": "Astaroth .57",
+    "ChineseName": "点57阿塔罗斯",
+    "ChineseOfficialName": "点57阿塔罗斯",
+    "MaxLevel": 54,
+    "Image": "astaroth-57.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-031.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "signal-50",
+    "EnglishName": "Signal 50",
+    "ChineseName": "西格诺50",
+    "ChineseOfficialName": "西格诺50",
+    "MaxLevel": 74,
+    "Image": "signal-50.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-032.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "sang-9mm",
+    "EnglishName": "SANG 9mm",
+    "ChineseName": "尚武9毫米机匣",
+    "ChineseOfficialName": "尚武9毫米机匣",
+    "MaxLevel": 38,
+    "Image": "sang-9mm.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-033.webp",
+    "Crop": [
+      470,
+      110,
+      1450,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "krait-p68",
+    "EnglishName": "Krait P68",
+    "ChineseName": "环蛇P68",
+    "ChineseOfficialName": "环蛇P68",
+    "MaxLevel": 38,
+    "Image": "krait-p68.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-034.webp",
+    "Crop": [
+      470,
+      110,
+      1450,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "50-gs",
+    "EnglishName": ".50 GS",
+    "ChineseName": "点50GS",
+    "ChineseOfficialName": "点50GS",
+    "MaxLevel": 37,
+    "Image": "50-gs.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-035.webp",
+    "Crop": [
+      470,
+      110,
+      1450,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "mojave-357",
+    "EnglishName": "Mojave .357",
+    "ChineseName": "莫哈韦点357",
+    "ChineseOfficialName": "莫哈韦点357",
+    "MaxLevel": 44,
+    "Image": "mojave-357.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-036.webp",
+    "Crop": [
+      470,
+      110,
+      1450,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "pila",
+    "EnglishName": "PILA",
+    "ChineseName": "针式导弹",
+    "ChineseOfficialName": "针式导弹",
+    "MaxLevel": 46,
+    "Image": "pila.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-037.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "rpg-8",
+    "EnglishName": "RPG-8",
+    "ChineseName": "RPG-8",
+    "ChineseOfficialName": "RPG-8",
+    "MaxLevel": 46,
+    "Image": "rpg-8.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-038.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "jokr",
+    "EnglishName": "JOKR",
+    "ChineseName": "JOKR",
+    "ChineseOfficialName": "JOKR",
+    "MaxLevel": 46,
+    "Image": "jokr.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-039.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "pm-40-anvil",
+    "EnglishName": "PM-40 Anvil",
+    "ChineseName": "PM-40铁砧",
+    "ChineseOfficialName": "PM-40铁砧",
+    "MaxLevel": 46,
+    "Image": "pm-40-anvil.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-040.webp",
+    "Crop": [
+      60,
+      110,
+      1870,
+      680
+    ]
+  },
+  {
+    "CatalogKey": "fss-carbon-edge-1095",
+    "EnglishName": "FSS Carbon Edge 1095",
+    "ChineseName": "FSS碳钢刀锋1095",
+    "ChineseOfficialName": "FSS碳钢刀锋1095",
+    "MaxLevel": 46,
+    "Image": "fss-carbon-edge-1095.jpg",
+    "Source": "https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "ChineseSource": "https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class",
+    "OriginalImage": "https://imgs.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/body/mw4/rfl-ops-and-weapons/MW4-RFL-OPS-WEAPONS-041.webp",
+    "Crop": [
+      420,
+      110,
+      1500,
+      680
+    ]
+  }
+]

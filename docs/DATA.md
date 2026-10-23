@@ -10,11 +10,15 @@
 
 - 冲突或缺失的要求不按数值自动判定完成，以游戏内实际解锁勾选为准。
 - 开放等级未知的特殊迷彩等待用户确认「游戏中已开放此挑战」。
-- 目前仅填入 HAN 86（72）与 Sang 38（38）的普通满级，其他武器不猜测满级。
+- 33 把武器的普通满级从官方首发武器资料页填写；未知旧存档自动补齐，保留用户已填的满级值。
 - 武器巅峰满级、巅峰大师 150 / 250 等门槛分别判断。
 - 勾选历史黄金补齐本武器必要前置；不推测其他武器已解锁，不从历史迷彩推断当前转生后的等级。
 - 多人推荐与 DMZ 条件参考分开，Warzone 未核实项目保留不确定性。
 
 官方素材地址见 [SOURCES](../src/Assets/SOURCES.md)。部分图片从官方合集裁切，其他武器上的显示只是迷彩样式参考；缺少对应图时使用类别标识。
+
+v0.5.0 加入 [官方英文武器资料](https://www.callofduty.com/uk/en/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class) 与 [官方简中资料](https://www.callofduty.com/cn/zh/blog/2026/10/call-of-duty-modern-warfare-4-launch-multiplayer-operators-weapons-equipment-create-a-class) 的 33 张首发枪型卡。`src/Data/weapons.json` 逐项记录原图 URL、裁切位置、官方中英文名及满级。裁切仅保留原厂枪型，不拼接或重绘涂装。已逐张查看卡片中的武器名称；官方 HTML 少数 alt 文案与实际卡片不符，以图内名称和对应标题为准。
+
+99 个特殊迷彩的中文名为本工具参考翻译，英文原名保留用于游戏对照，不声称是官方简中翻译。已有中文的路线名沿用既有资料，英文名与条件来自原始来源字段或已核对的官方门槛。武器中文名直接采用官方简中首发资料的武器标题，官方保留 M4 等型号时原样保留，不用类别名冒充中文名。用户改写任务后不再显示旧任务的英文条件，避免错误对照。
 
 设计参考 Call of Duty 官方进度页面的路线区分、[Raycast Windows](https://www.raycast.com/windows) 的紧凑层级、[SteelSeries Sonar](https://steelseries.com/gg/sonar) 的信息优先级、[Elgato Wave Link](https://www.elgato.com/us/en/s/wave-link-app) 的主次区域。布局、交互、界面代码独立实现，未复用参考软件的图形或代码。

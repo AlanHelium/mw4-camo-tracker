@@ -21,7 +21,7 @@ public class Tracker
  public static TrackerData Seed()=>Catalog.Create();
  public void Normalize()
  {
-  if(Data.Weapons.Count==0)Data=Catalog.Create();foreach(var w in Data.Weapons)if(w.Challenges.Count==0)w.Challenges.Add(new());
+  if(Data.Weapons.Count==0)Data=Catalog.Create();foreach(var w in Data.Weapons){if(w.Challenges.Count==0)w.Challenges.Add(new());if(w.MaxLevel<=0&&WeaponArt.Info(w) is {} info)w.MaxLevel=info.MaxLevel;}
   if(!Data.Weapons.Any(w=>w.Id==Data.SelectedWeapon))Data.SelectedWeapon=Data.Weapons[0].Id;
   if(!CurrentWeapon.Challenges.Any(c=>c.Id==Data.SelectedChallenge))Data.SelectedChallenge=CurrentWeapon.Challenges[0].Id;
   Data.SessionWeapons??=[];Data.SessionWeapons=Data.SessionWeapons.Where(id=>Data.Weapons.Any(w=>w.Id==id)).Distinct().ToList();

@@ -6,8 +6,8 @@ public partial class MainWindow
  void RecordLevels()
  {
   var w=tracker.CurrentWeapon;
-  var window=new Window{Title=w.Name+" · 武器等级",Width=450,Height=440,Owner=this,WindowStartupLocation=WindowStartupLocation.CenterOwner,ResizeMode=ResizeMode.NoResize,Background=B(Ink),Foreground=B(White),FontFamily=FontFamily};window.Resources=Resources;window.SourceInitialized+=(_,_)=>DarkTitle(window);
-  var panel=new StackPanel{Margin=new(24)};panel.Children.Add(Label(w.Name,23,White,true));panel.Children.Add(new Border{Height=9});panel.Children.Add(Label("这里记录武器等级，与账号巅峰分开。",11,Muted));panel.Children.Add(new Border{Height=18});
+  var window=new Window{Title=Bilingual.WeaponPair(w)+" · 武器等级",Width=450,Height=440,Owner=this,WindowStartupLocation=WindowStartupLocation.CenterOwner,ResizeMode=ResizeMode.NoResize,Background=B(Ink),Foreground=B(White),FontFamily=FontFamily};window.Resources=Resources;window.SourceInitialized+=(_,_)=>DarkTitle(window);
+  var panel=new StackPanel{Margin=new(24)};panel.Children.Add(Label(Bilingual.WeaponPair(w),20,White,true));panel.Children.Add(new Border{Height=9});panel.Children.Add(Label("这里记录武器等级，与账号巅峰分开。",11,Muted));panel.Children.Add(new Border{Height=18});
   panel.Children.Add(Label("当前阶段",12));var stage=new ComboBox{ItemsSource=new[]{"普通武器 · 还未转入武器巅峰","武器巅峰 1 · 已转生一次","武器巅峰大师 · 巅峰 1 练满后"},SelectedIndex=w.Prestige,Padding=new(8),Margin=new(0,7,0,15)};panel.Children.Add(stage);
   panel.Children.Add(Label("游戏内当前武器等级",12));var level=new TextBox{Text=w.LevelKnown?w.WeaponLevel.ToString():"",Margin=new(0,7,0,15)};panel.Children.Add(level);
   panel.Children.Add(Label("该武器的普通满级等级 · 未知可留空",12,Muted));var max=new TextBox{Text=w.MaxLevel>0?w.MaxLevel.ToString():"",Margin=new(0,7,0,18)};panel.Children.Add(max);

@@ -12,7 +12,7 @@ public partial class App : Application
   if(shot<0)
   {
    instance=new System.Threading.Mutex(true,"Local\\CamoTracker.Desktop.v1",out var fresh);
-   if(!fresh){MessageBox.Show("迷彩行动台已在运行。按 Ctrl+Alt+Space 可显示或隐藏窗口。","CAMO");Shutdown();return;}
+   if(!fresh){MessageBox.Show(Branding.Chinese+"已在运行。按 Ctrl+Alt+Space 可显示或隐藏窗口。",Branding.Title);Shutdown();return;}
    Exit+=(_,_)=>instance.ReleaseMutex();
   }
   // This PC's TSF service can deadlock WPF at startup. Disable TSF inside this

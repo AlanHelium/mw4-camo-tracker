@@ -36,7 +36,7 @@ public partial class MainWindow
   if(mini is {IsVisible:true}){mini.Hide();Render();Show();Activate();return;}
   if(mini==null)
   {
-   mini=new Window{Title="MW4 · 迷彩 HUD",SizeToContent=SizeToContent.WidthAndHeight,WindowStyle=WindowStyle.None,AllowsTransparency=true,Background=Brushes.Transparent,ResizeMode=ResizeMode.NoResize,Topmost=true,ShowInTaskbar=true,FontFamily=FontFamily,Left=Math.Max(0,SystemParameters.WorkArea.Right-470),Top=100,ShowActivated=false};
+   mini=new Window{Title=Branding.Title+" · HUD",SizeToContent=SizeToContent.WidthAndHeight,WindowStyle=WindowStyle.None,AllowsTransparency=true,Background=Brushes.Transparent,ResizeMode=ResizeMode.NoResize,Topmost=true,ShowInTaskbar=true,FontFamily=FontFamily,Left=Math.Max(0,SystemParameters.WorkArea.Right-470),Top=100,ShowActivated=false};
    mini.Resources=Resources;mini.Icon=Icon;mini.SourceInitialized+=(_,_)=>ApplyOverlayLock();
    mini.Closing+=(_,e)=>{if(!shuttingDown){e.Cancel=true;mini.Hide();Show();Activate();}};
   }

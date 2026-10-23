@@ -1,6 +1,6 @@
 # Third-party notices
 
-The MIT license covers original project source code only.
+The MIT license covers original project source code, the original vector trophy icon, and the original synthesized `unlock.wav` audio cue. It does not cover official game artwork or the supplied donation image.
 
 Call of Duty, Modern Warfare and related names, images and marks are owned by Activision Publishing, Inc. and their respective rights holders. Official promotional images in `src/Assets` are included as attributed visual references for this fan utility; no ownership or general redistribution license to those images is claimed. Source URLs are listed in `src/Assets/SOURCES.md`. Rights holders may request removal through repository issues. This project is not affiliated with or endorsed by Activision.
 
