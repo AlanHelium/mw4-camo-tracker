@@ -9,6 +9,7 @@ namespace CamoTracker;
 
 sealed class UpdateManifest
 {
+ public List<UpdateFile> Files {get;set;}=[];
  public int Schema {get;set;}=1;
  public long Revision {get;set;}
  public string Updated {get;set;}="";
@@ -18,6 +19,7 @@ sealed class UpdateManifest
  public string Sha256 {get;set;}="";
  public long Bytes {get;set;}
 }
+sealed class UpdateFile {public string Path {get;set;}="";public string Sha256 {get;set;}="";public int Bytes {get;set;}}
 sealed class PreparedPack : IDisposable
 {
  public string Root {get;}
@@ -29,6 +31,7 @@ sealed class PreparedPack : IDisposable
 static class DataUpdates
 {
  const string Api="https://api.github.com/repos/AlanHelium/mw4-camo-tracker/";
+ const string Cdn="https://cdn.jsdelivr.net/gh/AlanHelium/mw4-camo-tracker@";
  const int MaxZip=24_000_000,MaxDownload=36_000_000;
  static readonly HttpClient http=new(){Timeout=TimeSpan.FromSeconds(90)};
  static DataUpdates(){http.DefaultRequestHeaders.UserAgent.ParseAdd("MW4-Camo-Tracker/0.7.0");}
@@ -68,17 +71,42 @@ static class DataUpdates
  }
  public static async Task<UpdateManifest> Check(CancellationToken token)
  {
-  var bytes=await Get(Api+"contents/data/channel.json?ref=main",64000,token);using var json=JsonDocument.Parse(bytes);
-  var content=Convert.FromBase64String(json.RootElement.GetProperty("content").GetString()!);var m=JsonSerializer.Deserialize<UpdateManifest>(content)!;
+  byte[] content;
+  try{var bytes=await Get(Api+"contents/data/channel.json?ref=main",64000,token);using var json=JsonDocument.Parse(bytes);content=Convert.FromBase64String(json.RootElement.GetProperty("content").GetString()!);}
+  catch(Exception ex) when(!token.IsCancellationRequested&&ex is HttpRequestException or TaskCanceledException){content=await Get(Cdn+"main/data/channel.json",64000,token);}
+  var m=JsonSerializer.Deserialize<UpdateManifest>(content)!;
   Compatible(m.Schema,m.MinimumApp);
-  if(!Regex.IsMatch(m.Blob??"",@"^[a-f0-9]{40}$")||!Regex.IsMatch(m.Sha256??"",@"^[a-f0-9]{64}$")||m.Bytes is <1 or >MaxZip||m.Revision<2026102400||m.Notes.Length>6000)throw new InvalidDataException("更新清单无效。");return m;
+  if(!Regex.IsMatch(m.Blob??"",@"^[a-f0-9]{40}$")||!Regex.IsMatch(m.Sha256??"",@"^[a-f0-9]{64}$")||m.Bytes is <1 or >MaxZip||m.Revision<2026102400||m.Notes.Length>6000||m.Files.Count>1200||m.Files.Sum(x=>(long)x.Bytes)>64_000_000||m.Files.Select(x=>x.Path).Distinct().Count()!=m.Files.Count||m.Files.Any(x=>(x.Path!="catalog.json"&&!SafeAsset(x.Path))||x.Bytes is <1 or >8_000_000||!Regex.IsMatch(x.Sha256??"",@"^[a-f0-9]{64}$")))throw new InvalidDataException("更新清单无效。");return m;
  }
  public static async Task<PreparedPack> Download(UpdateManifest m,CancellationToken token)
  {
-  var bytes=await Get(Api+"git/blobs/"+m.Blob,MaxDownload,token);using var json=JsonDocument.Parse(bytes);var zip=Convert.FromBase64String(json.RootElement.GetProperty("content").GetString()!);
-  if(zip.Length!=m.Bytes||!Convert.ToHexStringLower(SHA256.HashData(zip)).Equals(m.Sha256,StringComparison.Ordinal))throw new InvalidDataException("下载校验失败，请重新下载。");
-  var result=await Task.Run(()=>Prepare(zip),token);
+  byte[] zip;
+  try{var bytes=await Get(Api+"git/blobs/"+m.Blob,MaxDownload,token);zip=await Task.Run(()=>{using var json=JsonDocument.Parse(bytes);return Convert.FromBase64String(json.RootElement.GetProperty("content").GetString()!);},token);}
+  catch(Exception ex) when(!token.IsCancellationRequested&&ex is HttpRequestException or TaskCanceledException){return await DownloadMirror(m,token);}
+  var result=await Task.Run(()=>{if(zip.Length!=m.Bytes||!Convert.ToHexStringLower(SHA256.HashData(zip)).Equals(m.Sha256,StringComparison.Ordinal))throw new InvalidDataException("下载校验失败，请重新检查更新。");return Prepare(zip);},token);
   if(result.Definition.Revision!=m.Revision){result.Dispose();throw new InvalidDataException("资料包与更新清单不一致。");}return result;
+ }
+ static async Task<PreparedPack> DownloadMirror(UpdateManifest m,CancellationToken token)
+ {
+  if(m.Files.Count<2)throw new InvalidDataException("镜像清单暂未同步，请稍后重试或导入离线包。");
+  using var cancel=CancellationTokenSource.CreateLinkedTokenSource(token);using var slots=new SemaphoreSlim(3);
+  var tasks=m.Files.Select(async file=>
+  {
+   await slots.WaitAsync(cancel.Token);try
+   {
+    string repoPath=file.Path=="catalog.json"?"data/catalog.json":file.Path.StartsWith("weapons/")?"src/Assets/Weapons/"+System.IO.Path.GetFileName(file.Path):"src/Assets/"+System.IO.Path.GetFileName(file.Path);
+    var bytes=await Get(Cdn+"data-"+m.Revision+"/"+repoPath,file.Bytes,cancel.Token);
+    if(bytes.Length!=file.Bytes||Convert.ToHexStringLower(SHA256.HashData(bytes))!=file.Sha256)throw new InvalidDataException("镜像文件校验失败，请重新检查更新。");return (file.Path,bytes);
+   }
+   catch{cancel.Cancel();throw;}finally{slots.Release();}
+  }).ToList();
+  var files=await Task.WhenAll(tasks);
+  var result=await Task.Run(()=>
+  {
+   using var memory=new MemoryStream();using(var zip=new ZipArchive(memory,ZipArchiveMode.Create,true))foreach(var (path,bytes) in files){using var entry=zip.CreateEntry(path,CompressionLevel.Optimal).Open();entry.Write(bytes);}
+   return Prepare(memory.ToArray());
+  },token);
+  if(result.Definition.Revision!=m.Revision){result.Dispose();throw new InvalidDataException("镜像资料版本不一致。");}return result;
  }
  public static PreparedPack Prepare(byte[] zip)
  {

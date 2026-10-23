@@ -6,5 +6,222 @@
   "Notes": "新增可独立更新的武器、双语、配图与前置规则资料包；军用迷彩明确为武器等级奖励，巅峰迷彩采用官方中文名。中英文官方数量冲突的模式大师挑战标记待核对。",
   "Blob": "a3ae3f0597a5671b3a7e8f24663972ade19f3ad7",
   "Sha256": "0ffe0b01db1915c90449bf7662df05169cba22427d50c0e3aebe9b971658bec1",
-  "Bytes": 16916652
+  "Bytes": 16916652,
+  "Files": [
+    {
+      "Path": "catalog.json",
+      "Sha256": "8a4da726bea288cfd34916449cfc807e1396fbe491714ee060679b19805638d8",
+      "Bytes": 830645
+    },
+    {
+      "Path": "camos/cascade.png",
+      "Sha256": "9fc5c437da3f5c2cc82e5a475117ff7ffc5f7043a172bd1553c4d5d5878d73b1",
+      "Bytes": 1870472
+    },
+    {
+      "Path": "camos/gold.png",
+      "Sha256": "70cabbf4e8daafe4d64bbb9af415599b9d7e8cc2b1581987faca4bd764dcd19b",
+      "Bytes": 1796530
+    },
+    {
+      "Path": "camos/harmonic.png",
+      "Sha256": "56e11247ab6bf296e103a08a285f17ec1b200661c88c9225cd1bf7492ca41f24",
+      "Bytes": 1865879
+    },
+    {
+      "Path": "camos/military.png",
+      "Sha256": "b1c7edf6ee16f23debc846dbecf458d460218ff4aff30c7002f844020e2bd704",
+      "Bytes": 1983796
+    },
+    {
+      "Path": "camos/platinum.png",
+      "Sha256": "b7a4070aeb90e0fb0806ba9dead407c91d25f6431361c2f8e621d6ac867b96bb",
+      "Bytes": 1758626
+    },
+    {
+      "Path": "camos/pyroclast.png",
+      "Sha256": "9015963d9bffce09d6ac0122e4bd6990f340e14284f379c356ce4f41fce1484a",
+      "Bytes": 1765943
+    },
+    {
+      "Path": "camos/scatter.png",
+      "Sha256": "f176022822061e8da70b20d550dd3a5fb2cedd0b1efe2bbafba1c1d12e2c3a35",
+      "Bytes": 1783753
+    },
+    {
+      "Path": "camos/special.png",
+      "Sha256": "695076e98219cbb0d8922e74d9722af009f394e8e6479f8b16f108d75f200b6d",
+      "Bytes": 1471366
+    },
+    {
+      "Path": "camos/terminus.png",
+      "Sha256": "f8a92374693e389d4dca561b51f7249255e7cf09f7227720999131df365356c5",
+      "Bytes": 1776435
+    },
+    {
+      "Path": "weapons/50-gs.jpg",
+      "Sha256": "e2edce54e5d60bd4573243d2e1db188bb85fa5411250c709b8ca30a6dac1f52e",
+      "Bytes": 34023
+    },
+    {
+      "Path": "weapons/apoc-338.jpg",
+      "Sha256": "30950786a72e02f6f54622c171022b6bc72859fe9591afce9c2cd940653c758f",
+      "Bytes": 25535
+    },
+    {
+      "Path": "weapons/astaroth-57.jpg",
+      "Sha256": "aeff96af52df02d833b6ee2f9d41cfee7ec0a41b2877e68cd54cbb6242891af2",
+      "Bytes": 25824
+    },
+    {
+      "Path": "weapons/axion.jpg",
+      "Sha256": "82aef543247d72c440f3ac99c8c8df8e1dd3cb281642e67dad7cecb2caf924ee",
+      "Bytes": 24909
+    },
+    {
+      "Path": "weapons/cronen-squall.jpg",
+      "Sha256": "abe3ea6e2ccf2b86b47b88ea6cf694e19fdc5035fcbc249a71567ed88b17c2f5",
+      "Bytes": 25358
+    },
+    {
+      "Path": "weapons/finn-lmg.jpg",
+      "Sha256": "3ef6ff6a0ed21b8cfc373da04c941c09f8ab7dae513d489f61fae68b7d7deb54",
+      "Bytes": 28827
+    },
+    {
+      "Path": "weapons/fss-carbon-edge-1095.jpg",
+      "Sha256": "46458f3661e3068f052f9822eff8b22a213856491e5a31e7152e5d3f8694ebef",
+      "Bytes": 19470
+    },
+    {
+      "Path": "weapons/han-86.jpg",
+      "Sha256": "002d657344ec00d8c58e4cd17ac7f4edca73de476d46cde0d6b656c738074e20",
+      "Bytes": 23381
+    },
+    {
+      "Path": "weapons/hyeon-burst.jpg",
+      "Sha256": "a9e40aa8a8be1e78fa2777523acdeb3dcd40fa104239a86153a283ca83bdd6fc",
+      "Bytes": 27310
+    },
+    {
+      "Path": "weapons/iso-nightshade.jpg",
+      "Sha256": "48ac47c31646c692f8d31c706f0afabadc566904b06d7d6192720d37becb08e1",
+      "Bytes": 22925
+    },
+    {
+      "Path": "weapons/jokr.jpg",
+      "Sha256": "09e4f87214e5228680d4dcc1cdb47cc26bc1c324605c6ca8f7e4381da241e26d",
+      "Bytes": 34984
+    },
+    {
+      "Path": "weapons/kastov-762.jpg",
+      "Sha256": "64a80f48021a2ca9167c13f282a9f77d5a348056a5b578144ed8336d08e937dd",
+      "Bytes": 23878
+    },
+    {
+      "Path": "weapons/kg-7-vulcan.jpg",
+      "Sha256": "c90c4b71a583da3df63457c06807c4d5dead4d9b29707950640f22a234736592",
+      "Bytes": 28854
+    },
+    {
+      "Path": "weapons/krait-p68.jpg",
+      "Sha256": "34591059d32f88dfa32d81e29612fae72fcc4e0ea3e0c035811f66ee2cd0ac7d",
+      "Bytes": 25508
+    },
+    {
+      "Path": "weapons/m4.jpg",
+      "Sha256": "03f174e49846c9fc6fc6fa3eb2965728ea365b306e10aa49e70309b1c0313059",
+      "Bytes": 26922
+    },
+    {
+      "Path": "weapons/mar-9.jpg",
+      "Sha256": "4c60ce11deb0776c4b0d34eb56314cae4da54ea3c9e918bac9f50eebf05b480d",
+      "Bytes": 22319
+    },
+    {
+      "Path": "weapons/mojave-357.jpg",
+      "Sha256": "017f4ac77836b80d75eca96d22a2a83565f4182d4d41bbdfc2dc30ea8f839a06",
+      "Bytes": 25322
+    },
+    {
+      "Path": "weapons/mosin-nagant.jpg",
+      "Sha256": "0ec990cc883c246406333e23fd69c30110a56fe5267d7390d337dfe2ee53cac8",
+      "Bytes": 16610
+    },
+    {
+      "Path": "weapons/oden.jpg",
+      "Sha256": "3dfe2de22571ae3429057a96e337558fbbb798467ed4d90ec70806814c3e541e",
+      "Bytes": 25954
+    },
+    {
+      "Path": "weapons/oris-8-6.jpg",
+      "Sha256": "1d474ee368f6b1414cc7832ecb032bde26b1cc09ccd2edbdd1ecdb0c2d2be3ef",
+      "Bytes": 22825
+    },
+    {
+      "Path": "weapons/patriot-xmr.jpg",
+      "Sha256": "d5a26aa3983037ad13ce38a14f668bd1f040ecc97caca4c450524ac2aa0e6ad5",
+      "Bytes": 23943
+    },
+    {
+      "Path": "weapons/pila.jpg",
+      "Sha256": "b81c6def1c40877633c8981c8091b506be64afa87a018ff7298d1f6e635da595",
+      "Bytes": 28980
+    },
+    {
+      "Path": "weapons/pm-40-anvil.jpg",
+      "Sha256": "82cc90468d234774400b9eb92c29877d304abb4df6587031f5be7ea2fe972b10",
+      "Bytes": 30299
+    },
+    {
+      "Path": "weapons/ppsh-41.jpg",
+      "Sha256": "7dde042382651c451c85bedde32492df25ebd0f8017093a53bb8c58fd7baf243",
+      "Bytes": 21131
+    },
+    {
+      "Path": "weapons/rezi-12.jpg",
+      "Sha256": "226b9c8b4ac4797f09b603931731e479c8f8fbc20eb7a86bc015173ea8b5d859",
+      "Bytes": 17241
+    },
+    {
+      "Path": "weapons/rpg-8.jpg",
+      "Sha256": "d7bb6dc699b23ff2a633a2fe22f3661f00e05124592577e655eaaab380cf30c6",
+      "Bytes": 23420
+    },
+    {
+      "Path": "weapons/sang-9mm.jpg",
+      "Sha256": "d0c2f3e739f0b079bbce36e37b07b7455cf6ff65cf1735bc7db4bc704621344a",
+      "Bytes": 27937
+    },
+    {
+      "Path": "weapons/signal-50.jpg",
+      "Sha256": "38f8236f85c3f51d6e2c6c3823c5e9ec30cf6ff47be5b35a4434b57c853dcb46",
+      "Bytes": 29042
+    },
+    {
+      "Path": "weapons/type-73.jpg",
+      "Sha256": "4d281a99bbd06406b41f5d76cda22d824c7f1b59e6f7e9514935cd6c79d4ce2e",
+      "Bytes": 24455
+    },
+    {
+      "Path": "weapons/vel-46.jpg",
+      "Sha256": "bee6074a85cb38bbe240e771aa4ec0e642b1efe636a75a32cf51fd59cfed9694",
+      "Bytes": 19500
+    },
+    {
+      "Path": "weapons/warlord.jpg",
+      "Sha256": "ab802341aaa47d4e8d73f2ebbf93ba38759fba8023bda35cf1c00910ed9a52f4",
+      "Bytes": 24933
+    },
+    {
+      "Path": "weapons/wz-55-striga.jpg",
+      "Sha256": "61ce437e51ba3bbe20c5aa22833837a1cafba2460a0a43d09440e41915a690cc",
+      "Bytes": 17990
+    },
+    {
+      "Path": "weapons/x-58-nyx.jpg",
+      "Sha256": "e75a038ffe3af384f6167846fcc50c34ca30700a27ca68efd73bfd2cbfdf03e8",
+      "Bytes": 21307
+    }
+  ]
 }

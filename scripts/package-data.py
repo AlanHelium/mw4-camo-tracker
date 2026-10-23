@@ -46,6 +46,12 @@ assert len(content) <= 24_000_000
 manifest = {key: definition[key] for key in ['Schema', 'Revision', 'Updated', 'MinimumApp', 'Notes']}
 manifest.update(Blob=hashlib.sha1(b'blob ' + str(len(content)).encode() + b'\0' + content).hexdigest(),
                 Sha256=hashlib.sha256(content).hexdigest(), Bytes=len(content))
+files = [{'Path': 'catalog.json', 'Sha256': hashlib.sha256(payload + b'\n').hexdigest(), 'Bytes': len(payload) + 1}]
+for path in sorted(paths):
+    source = ROOT / 'src/Assets' / ('Weapons' if path.startswith('weapons/') else '') / Path(path).name
+    item = source.read_bytes()
+    files.append({'Path': path, 'Sha256': hashlib.sha256(item).hexdigest(), 'Bytes': len(item)})
+manifest['Files'] = files
 (DATA / 'channel.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 (DATA / 'catalog.json').write_bytes(payload + b'\n')
 print(f"Data {manifest['Revision']}: {len(names) - 1} weapons; {len(content):,} ZIP bytes; SHA256 {manifest['Sha256']}")

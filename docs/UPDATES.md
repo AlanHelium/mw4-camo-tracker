@@ -28,8 +28,8 @@
 4. `CamoImages.Crop` 为空表示整图，四个数表示 `[x,y,width,height]`，坐标以原图等比缩放到宽 1920 为基准。`Caption` 写清示例枪型，勿把样式参考称为其他武器的实际涂装。
 5. 运行 `python scripts/package-data.py`，生成完整 ZIP、SHA256 和 `data/channel.json`。脚本只用标准库，输出可重复，不能包含玩家进度。
 6. 运行 `scripts/build.ps1`：发布、迁移/故障恢复测试、完整包与图片校验。将 `data/catalog.json`、`data/catalog-pack.zip`、`data/channel.json` 及新增图片在同一提交发布。channel 的 `Blob` 为 ZIP 的 Git blob SHA，由脚本计算。
-7. main 生效后，运行 `CamoTracker.exe --verify-feed` 验证公开清单、下载 SHA256、解压及图片。将同一个 `catalog-pack.zip` 附在 GitHub Release 供离线导入。纯资料更新可单独发布 data 标签，无需重新发行程序。
+7. 为该包创建不可变的 Git 标签 `data-<Revision>`，指向包含该 ZIP 的提交；同一数据标签不能改指向。可运行 `scripts/publish-data.ps1 -GitHubCli gh` 验证并发布离线包（需先推送源码且工作区干净）。main 生效后，运行 `CamoTracker.exe --verify-feed` 验证公开清单、下载 SHA256、解压及图片。将同一个 `catalog-pack.zip` 附在 GitHub Release 供离线导入。纯资料更新可单独发布 data 标签，无需重新发行程序。
 
-界面只下载核实后发布的资料包，不直接爬网站后覆盖用户数据。清单固定取自 `AlanHelium/mw4-camo-tracker`，ZIP 经不可变 Git blob API 下载，与清单 SHA256 和大小比对；这是完整性校验，不宣称离线 ZIP 有数字签名。
+界面只下载核实后发布的资料包，不直接爬网站后覆盖用户数据。清单固定取自 `AlanHelium/mw4-camo-tracker`。优先使用 GitHub API；连接失败或公共额度耗尽时，改用 jsDelivr 的同仓库镜像，包固定取自不可变 `data-<Revision>` 标签。CDN 的 main 清单可能有缓存延迟，界面显示资料日期。GitHub ZIP 比对整包 SHA256 和大小；CDN 按清单逐个下载目录及图片，比对每个文件 SHA256 和大小后再组装验证。发布后通过 [jsDelivr 缓存刷新工具](https://www.jsdelivr.com/tools/purge) 刷新 main 清单；这是完整性校验，不宣称离线 ZIP 有数字签名。
 
 schema 1 限制：ZIP 24 MB、解压总量 64 MB、单文件 8 MB、单图 4096 × 4096，文件名和类型白名单；拒绝重复文件、越界路径、缺图、未知规则种类和不兼容版本。合并后重新验证存档容量和范围，超过上限时需升级程序。
