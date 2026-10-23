@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <Version>0.4.0</Version>
+    <Product>MW4 迷彩行动台</Product>
+    <Description>独立的 Windows 迷彩挑战计划与游戏小窗</Description>
+  </PropertyGroup>
+  <ItemGroup><Resource Include="Assets\*.png" /><EmbeddedResource Include="Data\catalog.json" LogicalName="CamoTracker.catalog.json" /></ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+**/bin/
+**/obj/
+release/
+tools/
+*.trace
+/preview*.png*
+/ui-review*.png*
+/release-preview*.png*
+/article-source.html
+/UI设计说明.md
+*.lnk
+/artifacts/
+/performance-local.json
+**/test-results.txt
+**/runtime-error.txt
+__pycache__/
