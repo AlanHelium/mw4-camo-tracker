@@ -9,7 +9,7 @@ public partial class MainWindow
  void SetToday(Weapon w,bool selected){try{tracker.SetSession(w,selected);}catch(InvalidOperationException e){MessageBox.Show(e.Message,"今日计划");}Render();}
  void MarkCurrentUnlocked()
  {
-  var w=tracker.CurrentWeapon;var c=tracker.Current;if(c.Done)return;tracker.MarkUnlocked(w,c,true);
+  if(mini is {IsVisible:true}){if(OverlayRows().Count==0)return;EnsureOverlaySelection();}var w=tracker.CurrentWeapon;var c=tracker.Current;if(c.Done)return;tracker.MarkUnlocked(w,c,true);
   var next=Recommendations.ForWeapon(tracker.Data,w);if(next!=null)tracker.Data.SelectedChallenge=next.Id;tracker.Save();Render();ShowUnlockToast(w,c);
  }
  void RecordProgress()

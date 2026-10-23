@@ -2,9 +2,15 @@
 
 Windows 独立迷彩计划工具。选好今天刷的武器，游戏中用小窗看目标，局后统一更新进度。
 
-[下载 v0.5.0 试用版](https://github.com/AlanHelium/mw4-camo-tracker/releases/tag/v0.5.0) · [提交问题](https://github.com/AlanHelium/mw4-camo-tracker/issues)
+[下载 v0.6.0 试用版](https://github.com/AlanHelium/mw4-camo-tracker/releases/tag/v0.6.0) · [提交问题](https://github.com/AlanHelium/mw4-camo-tracker/issues)
 
 ![主界面与游戏小窗](docs/interface.png)
+
+主界面顶部「设计」可切换原版与 3 个新布局，切换不改变挑战进度，小窗同步强调色与圆角。原版仍为首次升级默认。
+
+![三个主界面布局](docs/designs.png)
+
+[A 战术简报](docs/design-tactical.png) · [B 军械展厅](docs/design-armory.png) · [C 赛场看板](docs/design-arena.png) · [设计说明](docs/DESIGNS.md)
 
 ## 开始使用
 
@@ -17,7 +23,7 @@ Windows 独立迷彩计划工具。选好今天刷的武器，游戏中用小窗
 
 ## 功能
 
-- 主界面与小窗共用深色、酸橙绿视觉；特殊、完成主义、巅峰路线有辅助色。
+- 主界面与小窗共用深色视觉；可选酸橙绿、冷蓝、暖橙，特殊、完成主义、巅峰路线保留辅助色。
 - 今日计划同步到小窗；优先推荐已知前置满足、接近完成的目标，也可指定「本局冲这个」。
 - 主界面「全局进度」可查看收集率、路线剩余百分比、最近可完成目标，以及全部武器的军事/特殊/黄金/白金/赤律/巅峰进度；支持分类筛选与中文搜索。
 - 历史解锁清单、前置条件、武器巅峰门槛；未知进度不会当成 0。

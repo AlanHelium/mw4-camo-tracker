@@ -58,6 +58,7 @@ public class TrackerData
  public double OverlayOpacity {get;set;}=.82;
  public double OverlayScale {get;set;}=1;
  public string HudStyle {get;set;}="combat";
+ public string MainDesign {get;set;}="classic";
  public bool UnlockEffects {get;set;}=true;
  public bool UnlockSound {get;set;}
  public bool SessionConfigured {get;set;}

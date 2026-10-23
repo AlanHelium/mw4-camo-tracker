@@ -47,7 +47,7 @@ public class Tracker
  }
  public void SetSession(Weapon w,bool selected){if(selected&&!Data.SessionWeapons.Contains(w.Id)&&Data.SessionWeapons.Count>=5)throw new InvalidOperationException("今天最多选 5 把武器。可先取消一把。");Snapshot();Data.SessionConfigured=true;if(selected){if(!Data.SessionWeapons.Contains(w.Id))Data.SessionWeapons.Add(w.Id);}else Data.SessionWeapons.Remove(w.Id);Save();}
  public bool InSession(Weapon w)=>Data.SessionWeapons.Contains(w.Id);
- public void Undo(){if(history.Count==0)return;Data=Parse(history.Pop());Normalize();Save();}
+ public void Undo(){if(history.Count==0)return;var design=Data.MainDesign;Data=Parse(history.Pop());Data.MainDesign=design;Normalize();Save();}
  public void Import(string json){var d=Parse(json);Snapshot();Data=d;Catalog.Upgrade(Data);Normalize();Save();}
  public void Save()
  {
