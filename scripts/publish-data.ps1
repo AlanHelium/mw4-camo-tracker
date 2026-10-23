@@ -1,4 +1,4 @@
-param([string]$GitHubCli = 'gh')
+param([string]$GitHubCli = 'gh', [string]$GitExecutable = 'git')
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $channel = Get-Content -LiteralPath (Join-Path $projectRoot 'data/channel.json') -Raw -Encoding utf8 | ConvertFrom-Json
@@ -6,8 +6,8 @@ $pack = Join-Path $projectRoot 'data/catalog-pack.zip'
 if ((Get-FileHash -LiteralPath $pack -Algorithm SHA256).Hash.ToLowerInvariant() -ne $channel.Sha256) { throw 'Rebuild the data pack before publishing.' }
 Push-Location $projectRoot
 try {
-    if (& git status --porcelain) { throw 'Commit and push the complete data source first.' }
-    $head = (& git rev-parse HEAD).Trim()
+    if (& $GitExecutable status --porcelain) { throw 'Commit and push the complete data source first.' }
+    $head = (& $GitExecutable rev-parse HEAD).Trim()
     $remoteHead = (& $GitHubCli api repos/AlanHelium/mw4-camo-tracker/git/ref/heads/main --jq '.object.sha').Trim()
     if ($LASTEXITCODE -ne 0 -or $head -ne $remoteHead) { throw 'Public main must match this checkout.' }
     $tag = 'data-' + $channel.Revision

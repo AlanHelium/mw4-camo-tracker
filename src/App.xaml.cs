@@ -38,7 +38,7 @@ public partial class App : Application
  }
  async void VerifyFeed()
  {
-  try{var m=await DataUpdates.Check(CancellationToken.None);using var pack=await DataUpdates.Download(m,CancellationToken.None);System.IO.File.WriteAllText(System.IO.Path.Combine(AppContext.BaseDirectory,"feed-results.txt"),"PASS: public manifest, SHA256 verified download, full image validation; revision "+m.Revision+"\n"+DataUpdates.Preview(pack.Definition));Shutdown();}
+  try{var m=await DataUpdates.Check(CancellationToken.None);using var pack=await DataUpdates.Download(m,CancellationToken.None);System.IO.File.WriteAllText(System.IO.Path.Combine(AppContext.BaseDirectory,"feed-results.txt"),"PASS: public manifest, ZIP or per-file SHA256 verified download, full image validation; revision "+m.Revision+"\n"+DataUpdates.Preview(pack.Definition));Shutdown();}
   catch(Exception ex){System.IO.File.WriteAllText(System.IO.Path.Combine(AppContext.BaseDirectory,"feed-results.txt"),"FAIL: "+ex);Shutdown(1);}
  }
 }

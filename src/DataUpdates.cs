@@ -75,6 +75,9 @@ static class DataUpdates
   try{var bytes=await Get(Api+"contents/data/channel.json?ref=main",64000,token);using var json=JsonDocument.Parse(bytes);content=Convert.FromBase64String(json.RootElement.GetProperty("content").GetString()!);}
   catch(Exception ex) when(!token.IsCancellationRequested&&ex is HttpRequestException or TaskCanceledException){content=await Get(Cdn+"main/data/channel.json",64000,token);}
   var m=JsonSerializer.Deserialize<UpdateManifest>(content)!;
+  // An edge cache may still have the original manifest for this exact pack.
+  // Only fill its file list when both the revision and ZIP digest match the app's baseline.
+  if(m.Files.Count==0){using var embedded=typeof(DataUpdates).Assembly.GetManifestResourceStream("CamoTracker.channel.json")!;var local=JsonSerializer.Deserialize<UpdateManifest>(embedded)!;if(local.Revision==m.Revision&&local.Sha256==m.Sha256&&local.Blob==m.Blob)m=local;}
   Compatible(m.Schema,m.MinimumApp);
   if(!Regex.IsMatch(m.Blob??"",@"^[a-f0-9]{40}$")||!Regex.IsMatch(m.Sha256??"",@"^[a-f0-9]{64}$")||m.Bytes is <1 or >MaxZip||m.Revision<2026102400||m.Notes.Length>6000||m.Files.Count>1200||m.Files.Sum(x=>(long)x.Bytes)>64_000_000||m.Files.Select(x=>x.Path).Distinct().Count()!=m.Files.Count||m.Files.Any(x=>(x.Path!="catalog.json"&&!SafeAsset(x.Path))||x.Bytes is <1 or >8_000_000||!Regex.IsMatch(x.Sha256??"",@"^[a-f0-9]{64}$")))throw new InvalidDataException("更新清单无效。");return m;
  }

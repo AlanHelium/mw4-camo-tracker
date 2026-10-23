@@ -17,5 +17,6 @@
     <Resource Include="Assets\Weapons\*.png" />
     <EmbeddedResource Include="Assets\unlock.wav" LogicalName="CamoTracker.unlock.wav" />
     <EmbeddedResource Include="..\data\catalog.json" LogicalName="CamoTracker.baseline.json" />
+    <EmbeddedResource Include="..\data\channel.json" LogicalName="CamoTracker.channel.json" />
   </ItemGroup>
 </Project>
