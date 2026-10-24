@@ -33,7 +33,7 @@ public class Tracker
  {
   if(json.Length>4_000_000)throw new InvalidDataException("文件超过 4 MB");var d=JsonSerializer.Deserialize<TrackerData>(json)??throw new InvalidDataException("空文件");
   if(d.Version!=1||d.Weapons==null||d.Weapons.Count is <1 or >200)throw new InvalidDataException("不支持的存档");var ids=new HashSet<string>();
-  foreach(var w in d.Weapons){if(w==null||string.IsNullOrWhiteSpace(w.Name)||w.CatalogKey==null||w.ChineseName==null||w.EnglishName==null||w.Name.Length>80||string.IsNullOrWhiteSpace(w.Id)||!ids.Add(w.Id)||w.Challenges==null||w.Challenges.Count is <1 or >200||w.Prestige is <0 or >2||w.WeaponLevel is <0 or >1000)throw new InvalidDataException("武器数据无效");foreach(var c in w.Challenges)if(c==null||string.IsNullOrWhiteSpace(c.Name)||c.CatalogKey==null||c.ChineseName==null||c.EnglishName==null||c.Unit==null||c.Kind==null||c.Stage==null||c.SourceRule==null||c.DmzRule==null||c.DmzSourceRule==null||c.Gates==null||c.Gates.Any(g=>g==null||g.Kind==null||g.Scope==null||g.ChallengeKey==null||g.Label==null)||c.Name.Length>100||c.Rule==null||c.Rule.Length>2000||c.Source==null||c.Source.Length>2000||c.Target is <1 or >1000000||c.Count<0||c.Count>c.Target||string.IsNullOrWhiteSpace(c.Id)||!ids.Add(c.Id))throw new InvalidDataException("挑战数据无效");}return d;
+  foreach(var w in d.Weapons){if(w==null||string.IsNullOrWhiteSpace(w.Name)||w.CatalogKey==null||w.ChineseName==null||w.EnglishName==null||w.Name.Length>80||string.IsNullOrWhiteSpace(w.Id)||!ids.Add(w.Id)||w.Challenges==null||w.Challenges.Count is <1 or >200||w.Prestige is <0 or >2||w.WeaponLevel is <0 or >1000)throw new InvalidDataException("武器数据无效");foreach(var c in w.Challenges)if(c==null||string.IsNullOrWhiteSpace(c.Name)||c.CatalogKey==null||c.ChineseName==null||c.EnglishName==null||c.Unit==null||c.Kind==null||c.Stage==null||c.SourceRule==null||c.DmzRule==null||c.DmzSourceRule==null||c.ReferenceRule==null||c.Gates==null||c.Gates.Any(g=>g==null||g.Kind==null||g.Scope==null||g.ChallengeKey==null||g.Label==null)||c.Name.Length>100||c.Rule==null||c.Rule.Length>2000||c.Source==null||c.Source.Length>2000||c.Target is <1 or >1000000||c.Count<0||c.Count>c.Target||string.IsNullOrWhiteSpace(c.Id)||!ids.Add(c.Id))throw new InvalidDataException("挑战数据无效");}return d;
  }
  public void Snapshot(){if(history.Count>=100){var keep=history.Take(99).Reverse().ToArray();history.Clear();foreach(var s in keep)history.Push(s);}history.Push(JsonSerializer.Serialize(Data));}
  public void Change(int amount){Snapshot();Current.Count=(int)Math.Clamp((long)Current.Count+amount,0,Current.Target);Current.ProgressKnown=true;Save();}
@@ -42,6 +42,11 @@ public class Tracker
  public void CompleteRun(Weapon w,Challenge c)
  {
   if(Eligibility.Reason(Data,w,c) is {} reason)throw new InvalidOperationException(reason);
+  MarkUnlocked(w,c,true);
+ }
+ public void ConfirmGameReward(Weapon w,Challenge c)
+ {
+  if(c.Kind!="military"||!c.GameRewardOnly)throw new InvalidOperationException("此入口只确认游戏内实际已获得的军用迷彩。");
   MarkUnlocked(w,c,true);
  }
  public void RestoreTo(Weapon w,Challenge milestone)
@@ -55,7 +60,7 @@ public class Tracker
   Snapshot();c.Unlocked=unlocked;c.Count=unlocked?c.Target:0;c.ProgressKnown=true;
   if(unlocked)
   {
-   IEnumerable<Challenge> implied=c.Kind switch{"military"=>w.Challenges.Where(p=>p.Kind=="military"&&p.RequiredWeaponLevel<=c.RequiredWeaponLevel),"gold"=>w.Challenges.Where(p=>p.Kind is "military" or "special"),"platinum"=>w.Challenges.Where(p=>p.Kind is "military" or "special" or "gold"),"harmonic"=>w.Challenges.Where(p=>p.Kind is "military" or "special" or "gold" or "platinum"),_=>[]};
+   IEnumerable<Challenge> implied=c.Kind switch{"military"=>w.Challenges.Take(w.Challenges.IndexOf(c)+1).Where(p=>p.Kind=="military"),"gold"=>w.Challenges.Where(p=>p.Kind is "military" or "special"),"platinum"=>w.Challenges.Where(p=>p.Kind is "military" or "special" or "gold"),"harmonic"=>w.Challenges.Where(p=>p.Kind is "military" or "special" or "gold" or "platinum"),_=>[]};
    foreach(var p in implied){p.Unlocked=true;p.Count=p.Target;p.ProgressKnown=true;}
   }
   Save();

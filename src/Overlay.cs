@@ -44,7 +44,9 @@ public partial class MainWindow
  }
  void EnsureOverlaySelection()
  {
-  var rows=OverlayRows().Skip(overlayPage*5).Take(5).ToList();if(rows.Count==0||rows.Any(r=>r.weapon.Id==tracker.Data.SelectedWeapon&&r.challenge.Id==tracker.Data.SelectedChallenge))return;tracker.Data.SelectedWeapon=rows[0].weapon.Id;tracker.Data.SelectedChallenge=rows[0].challenge.Id;tracker.Save();
+  if(!HudHasTarget)return;
+  if(tracker.Current.Done&&Recommendations.ForWeapon(tracker.Data,tracker.CurrentWeapon) is {} next){tracker.Data.SelectedChallenge=next.Id;tracker.Save();}
+
  }
  void ToggleOverlayLock(){if(!overlayLocked&&!registeredHotkeys.Contains(865)&&!preview){MessageBox.Show("Ctrl+Alt+L 被其他程序占用，暂不能开启鼠标穿透，以确保你能随时解锁。","解锁快捷键不可用");return;}overlayLocked=!overlayLocked;ApplyOverlayLock();RefreshMini();}
  void ApplyOverlayLock()

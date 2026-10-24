@@ -6,7 +6,7 @@ using System.Windows.Shapes;
 namespace CamoTracker;
 public partial class MainWindow
 {
- string expandedWeaponId="",journeyChallengeId="";
+ string journeyChallengeId="";
  Window? journeyWindow;
  Action? refreshJourney;
  void RefreshJourney()=>refreshJourney?.Invoke();
@@ -34,7 +34,7 @@ public partial class MainWindow
    var body=new StackPanel();var image=OfficialArt.Image(OfficialArt.Key(c));var tile=new Border{Width=small?62:74,Height=small?35:44,Background=B(Surface),BorderBrush=B(active?Acid:Line),BorderThickness=new(active?2:1),CornerRadius=new(4),Child=image!=null?new Image{Source=image,Stretch=Stretch.UniformToFill}:Label("CAMO",9,Muted)};body.Children.Add(tile);
    var name=OneLine(NodeName(c),small?9:10,c.Done?Acid:White,c.Done);name.HorizontalAlignment=HorizontalAlignment.Center;name.MaxWidth=step-8;name.Margin=new(0,3,0,0);body.Children.Add(name);
    var dot=new Border{Width=14,Height=14,CornerRadius=new(7),Background=B(c.Done?Acid:Ink),BorderBrush=B(active?Acid:reason!=null?"#6D6580":Muted),BorderThickness=new(2),Margin=new(0,4,0,3),Child=c.Done?new TextBlock{Text="✓",FontSize=8,Foreground=B(Ink),HorizontalAlignment=HorizontalAlignment.Center}:null};body.Children.Add(dot);
-   var state=OneLine(c.Kind=="military"?$"武器 Lv.{c.RequiredWeaponLevel}":c.Done?"已拥有":reason!=null?"前置未满足":"可刷取",8,c.Done?Acid:Muted);state.HorizontalAlignment=HorizontalAlignment.Center;body.Children.Add(state);
+   var state=OneLine(c.GameRewardOnly?c.Done?"已拥有":"按游戏确认":c.Kind=="military"?$"武器 Lv.{c.RequiredWeaponLevel}":c.Done?"已拥有":reason!=null?"前置未满足":"可刷取",8,c.Done?Acid:Muted);state.HorizontalAlignment=HorizontalAlignment.Center;body.Children.Add(state);
    var button=Command("",()=>select(c));button.Tag="node-"+c.Id;button.Content=body;button.Width=step;button.Padding=new(0);button.Margin=new(0);button.Background=Brushes.Transparent;button.HorizontalAlignment=HorizontalAlignment.Left;button.VerticalAlignment=VerticalAlignment.Top;button.SetValue(MarginProperty,new Thickness(i*step,0,0,0));button.ToolTip=Bilingual.Camo(c)+"\n"+Bilingual.Rule(c)+"\n"+(reason??"前置已满足");track.Children.Add(button);
   }
   var scroll=new ScrollViewer{Content=track,HorizontalContentAlignment=HorizontalAlignment.Left,HorizontalScrollBarVisibility=ScrollBarVisibility.Auto,VerticalScrollBarVisibility=ScrollBarVisibility.Disabled,CanContentScroll=false};
@@ -50,11 +50,15 @@ public partial class MainWindow
   var art=OfficialArt.Image(OfficialArt.Key(c));var photo=new StackPanel();photo.Children.Add(new Border{Height=small?85:126,Background=B("#0B100F"),Child=art!=null?new Image{Source=art,Stretch=Stretch.UniformToFill}:Label("暂无确切配图",10,Muted)});var caption=Label(art==null?"等待资料更新":OfficialArt.Caption(OfficialArt.Key(c)),8,Muted);caption.TextWrapping=TextWrapping.Wrap;caption.Margin=new(0,5,0,0);photo.Children.Add(caption);Put(detail,photo);
   var text=Stack(Label(Bilingual.Camo(c),small?13:18,ColorFor(c),true));var rule=Label(c.Rule,small?10:12,White);rule.TextWrapping=TextWrapping.Wrap;rule.Margin=new(0,6,0,4);text.Children.Add(rule);
   var english=Label(Bilingual.RuleEn(c),9,Muted);english.TextWrapping=TextWrapping.Wrap;text.Children.Add(english);var state=Label(c.Done?"已拥有 ✓":reason??"前置已满足，可以刷取",10,c.Done?Acid:reason==null?Acid:"#C5ABDD");state.TextWrapping=TextWrapping.Wrap;state.Margin=new(0,6,0,0);text.Children.Add(state);Put(detail,text,2);panel.Children.Add(detail);
-  if(c.Kind=="special"&&c.LevelGateUnknown&&!c.Done)
+  if(c.Kind=="special"&&!c.Done)
   {
    var open=new CheckBox{Content="已在游戏内确认此挑战开放",IsChecked=c.OpenConfirmed,Foreground=B(Muted),FontSize=10,Margin=new(0,0,0,10)};open.Click+=(_,_)=>{tracker.Snapshot();c.OpenConfirmed=open.IsChecked==true;tracker.Save();Render();repaint();};panel.Children.Add(open);
   }
-  if(c.IsLevelReward)
+  if(c.GameRewardOnly)
+  {
+   var confirm=Command(c.Done?"已拥有 ✓":"游戏里已解锁",()=>{tracker.ConfirmGameReward(w,c);SetJourneyNext(w,c);Render();repaint();ShowUnlockToast(w,c);},true);confirm.IsEnabled=!c.Done;panel.Children.Add(confirm);
+  }
+  else if(c.IsLevelReward)
   {
    var levels=Command("记录武器等级 / 巅峰",()=>{RecordWeaponLevels(w,owner);repaint();},true);panel.Children.Add(levels);
   }
@@ -71,7 +75,7 @@ public partial class MainWindow
     try{tracker.CompleteRun(w,c);}catch(InvalidOperationException ex){MessageBox.Show(owner,ex.Message);return;}SetJourneyNext(w,c);Render();repaint();ShowUnlockToast(w,c);
    },true);unlock.IsEnabled=!c.Done&&reason==null;unlock.ToolTip=reason;panel.Children.Add(Row(input,total,unlock));var unit=Label($"当前 { (c.ProgressKnown?c.Count.ToString():"未知") } / {c.Target} {c.Unit} · 填游戏内总数",9,Muted);unit.Margin=new(0,5,0,8);panel.Children.Add(unit);
   }
-  var follow=Command("本局冲这个",()=>{try{tracker.SetSession(w,true);}catch(InvalidOperationException ex){MessageBox.Show(owner,ex.Message);return;}tracker.Data.SelectedWeapon=w.Id;tracker.Data.SelectedChallenge=c.Id;w.FocusChallengeId=c.Id;w.OverlayChallengeId=c.Id;tracker.Save();Render();repaint();});follow.IsEnabled=!c.Done&&reason==null;follow.ToolTip=reason;
+  var follow=Command("本局冲这个",()=>{try{tracker.SetSession(w,true);}catch(InvalidOperationException ex){MessageBox.Show(owner,ex.Message);return;}tracker.Data.SelectedWeapon=w.Id;tracker.Data.SelectedChallenge=c.Id;w.FocusChallengeId=c.Id;w.OverlayChallengeId=c.Id;tracker.Save();Render();repaint();});follow.IsEnabled=!c.Done&&(c.GameRewardOnly||reason==null);follow.ToolTip=reason;
   var calibrate=Command("校正到此节点",()=>
   {
    string lane=c.Kind=="prestige"?"巅峰分支":"普通迷彩路线";
@@ -88,19 +92,9 @@ public partial class MainWindow
   var key=w.Id;void Paint(){var weapon=tracker.Data.Weapons.FirstOrDefault(x=>x.Id==key);if(weapon==null)return;var header=Stack(Label(Bilingual.WeaponZh(weapon),25,White,true),Label(Bilingual.WeaponEn(weapon),11,Muted),new Border{Height=18},JourneyBody(weapon,false,Paint,window));window.Content=new ScrollViewer{Content=header,Margin=new(24),VerticalScrollBarVisibility=ScrollBarVisibility.Auto};}
   refreshJourney=Paint;window.Closed+=(_,_)=>{journeyWindow=null;refreshJourney=null;};Paint();return window;
  }
- void OpenHudWeapon(int index)
- {
-  SelectOverlayRow(index);expandedWeaponId=tracker.CurrentWeapon.Id;journeyChallengeId=tracker.Current.Id;RefreshMini();
- }
  void SetJourneyNext(Weapon w,Challenge previous)
  {
   var next=Recommendations.ForWeapon(tracker.Data,w)??previous;journeyChallengeId=next.Id;tracker.Data.SelectedWeapon=w.Id;tracker.Data.SelectedChallenge=next.Id;w.OverlayChallengeId=next.Id;tracker.Save();
- }
- UIElement HudJourney()
- {
-  var w=tracker.Data.Weapons.FirstOrDefault(x=>x.Id==expandedWeaponId)??tracker.CurrentWeapon;
-  var panel=new StackPanel();var back=Command("‹  今日计划",()=>{expandedWeaponId="";RefreshMini();});back.Background=Brushes.Transparent;back.HorizontalAlignment=HorizontalAlignment.Left;back.Padding=new(0,0,0,8);panel.Children.Add(back);
-  panel.Children.Add(Row(GunThumbnail(w,90,48),new Border{Width=12},Stack(Label(Bilingual.WeaponZh(w),20,White,true),Label(Bilingual.WeaponEn(w),10,Muted))));panel.Children.Add(new Border{Height=14});panel.Children.Add(JourneyBody(w,true,RefreshMini,mini!));return panel;
  }
  async Task CaptureJourneyVariants(string path)
  {
@@ -110,7 +104,15 @@ public partial class MainWindow
   bool HasBlockedButton(DependencyObject obj){if(obj is Button b&&b.Content as string=="本项已解锁")return !b.IsEnabled;for(int i=0;i<VisualTreeHelper.GetChildrenCount(obj);i++)if(HasBlockedButton(VisualTreeHelper.GetChild(obj,i)))return true;return false;}
   if(!HasBlockedButton(window)||Eligibility.Reason(tracker.Data,axion,platinum)==null)throw new Exception("Platinum action must be blocked by class Gold gate");
   var image=new System.Windows.Media.Imaging.RenderTargetBitmap((int)window.ActualWidth,(int)window.ActualHeight,96,96,PixelFormats.Pbgra32);image.Render(window);SavePng(image,System.IO.Path.ChangeExtension(path,"journey.png"));window.Close();
-  tracker.SetSession(axion,true);if(mini is not {IsVisible:true})ToggleMini();mini!.UpdateLayout();await Task.Delay(100);var rows=OverlayRows();int index=rows.FindIndex(r=>r.weapon.Id==axion.Id);if(index<0)throw new Exception("Axion missing from plan");var row=FindTag(mini!,"weapon-"+axion.Id)??throw new Exception("HUD weapon row missing");row.RaiseEvent(new RoutedEventArgs(Button.ClickEvent,row));if(expandedWeaponId!=axion.Id)throw new Exception("HUD weapon interaction failed");journeyChallengeId=platinum.Id;RefreshMini();await Task.Delay(250);mini!.UpdateLayout();if(!HasBlockedButton(mini))throw new Exception("HUD bypassed prerequisites");
-  var hud=new System.Windows.Media.Imaging.RenderTargetBitmap((int)mini.ActualWidth,(int)mini.ActualHeight,96,96,PixelFormats.Pbgra32);hud.Render(mini);SavePng(hud,System.IO.Path.ChangeExtension(path,"journey-hud.png"));expandedWeaponId="";RefreshMini();ToggleMini();
+  tracker.SetSession(axion,true);if(mini is not {IsVisible:true})ToggleMini();mini!.UpdateLayout();
+  var switcher=FindTag(mini!,"hud-switch")??throw new Exception("HUD switch button missing");switcher.RaiseEvent(new RoutedEventArgs(Button.ClickEvent,switcher));
+  var gunItem=hudWeaponsMenu!.Items.OfType<MenuItem>().First(i=>Equals(i.Tag,axion.Id));gunItem.RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent,gunItem));hudWeaponsMenu.IsOpen=false;
+  if(tracker.CurrentWeapon.Id!=axion.Id)throw new Exception("HUD gun menu did not switch current gun");tracker.Data.SelectedChallenge=platinum.Id;tracker.Save();Render();await Task.Delay(150);mini.UpdateLayout();
+  var done=FindTag(mini!,"hud-complete")??throw new Exception("HUD completion action missing");if(done.IsEnabled)throw new Exception("HUD bypassed Platinum prerequisites");
+  var hud=new System.Windows.Media.Imaging.RenderTargetBitmap((int)mini.ActualWidth,(int)mini.ActualHeight,96,96,PixelFormats.Pbgra32);hud.Render(mini);SavePng(hud,System.IO.Path.ChangeExtension(path,"journey-hud.png"));
+  var nyx=tracker.Data.Weapons.First(w=>w.CatalogKey=="x-58-nyx");var reward=nyx.Challenges.First(c=>c.Kind=="military");tracker.Data.SelectedWeapon=nyx.Id;tracker.Data.SelectedChallenge=reward.Id;tracker.Save();Render();mini.UpdateLayout();
+  var rewardButton=FindTag(mini,"hud-complete")??throw new Exception("Game reward action missing");if(!rewardButton.IsEnabled||nyx.LevelKnown)throw new Exception("Game-owned confirmation must not require a made-up level");
+  rewardButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent,rewardButton));if(!reward.Done||tracker.CurrentWeapon.Id!=nyx.Id||tracker.Current.Id==reward.Id||nyx.Challenges.Where(c=>c.Kind=="military").Count(c=>c.Done)!=1)throw new Exception("Game reward must advance only to same gun's next goal");
+  DismissUnlock();tracker.Undo();Render();mini.UpdateLayout();var focused=new System.Windows.Media.Imaging.RenderTargetBitmap((int)mini.ActualWidth,(int)mini.ActualHeight,96,96,PixelFormats.Pbgra32);focused.Render(mini);SavePng(focused,System.IO.Path.ChangeExtension(path,"focused.png"));ToggleMini();
  }
 }

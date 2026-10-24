@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <Version>0.7.0</Version>
+    <Version>0.7.1</Version>
     <Product>MW4 迷彩猎手 / MW4 Camo Tracker</Product>
     <Description>独立的 Windows 迷彩挑战计划与游戏小窗</Description>
   </PropertyGroup>

@@ -5,6 +5,7 @@ static class Eligibility
  public static string? Reason(TrackerData? data,Weapon w,Challenge c)
  {
   if(c.Done)return null;
+  if(c.GameRewardOnly)return "游戏前置待核对，按实际已解锁状态确认";
   if(c.RequirementUnverified)return "条件待游戏内核对";
   if(c.Kind=="military"&&(!w.LevelKnown||w.Prestige==0&&w.WeaponLevel<c.RequiredWeaponLevel))return $"先记录武器等级至 Lv.{c.RequiredWeaponLevel}";
   if(c.Kind=="special"&&!c.OpenConfirmed)

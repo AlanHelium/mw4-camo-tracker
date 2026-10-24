@@ -7,7 +7,7 @@ static class Recommendations
   return w.Challenges.Where(c=>!c.Done)
    .OrderBy(c=>Eligibility.Reason(data,w,c)==null?0:1)
    .ThenByDescending(c=>c.ProgressKnown?1.0*c.Count/c.Target:0)
-   .ThenBy(c=>c.RequirementUnverified?1:0).ThenBy(c=>w.Challenges.IndexOf(c)).FirstOrDefault();
+   .ThenBy(c=>c.RequirementUnverified&&!c.GameRewardOnly?1:0).ThenBy(c=>w.Challenges.IndexOf(c)).FirstOrDefault();
  }
  public static List<(Weapon weapon,Challenge challenge)> Next(TrackerData data,ISet<string> skipped,bool session=false)
  {

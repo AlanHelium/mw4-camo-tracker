@@ -1,17 +1,17 @@
 {
   "Schema": 1,
-  "Revision": 2026102401,
+  "Revision": 2026102402,
   "Updated": "2026-10-24",
-  "MinimumApp": "0.7.0",
-  "Notes": "新增可独立更新的武器、双语、配图与前置规则资料包；军用迷彩明确为武器等级奖励，巅峰迷彩采用官方中文名。中英文官方数量冲突的模式大师挑战标记待核对。",
-  "Blob": "a3ae3f0597a5671b3a7e8f24663972ade19f3ad7",
-  "Sha256": "0ffe0b01db1915c90449bf7662df05169cba22427d50c0e3aebe9b971658bec1",
-  "Bytes": 16916652,
+  "MinimumApp": "0.7.1",
+  "Notes": "小窗改为当前单把武器与目标迷彩；军用奖励按游戏实际已解锁状态确认，不再强制填写或推算等级。配件共享与跳级不能视为军用门槛的逐项核实；保留公开资料供对照，待游戏前置原文校准。",
+  "Blob": "5a5c530e1f48fd78448e78f0084a8fd09e1a2969",
+  "Sha256": "762652678dfc5cc76d46574a42bae0dd661e68a61a9a0e99735052cbf140f7e7",
+  "Bytes": 16916096,
   "Files": [
     {
       "Path": "catalog.json",
-      "Sha256": "8a4da726bea288cfd34916449cfc807e1396fbe491714ee060679b19805638d8",
-      "Bytes": 830645
+      "Sha256": "c0e913453a777ce78ac95f33a782d4e5f644f611efeabe90693cc94cc0abb4ab",
+      "Bytes": 931826
     },
     {
       "Path": "camos/cascade.png",

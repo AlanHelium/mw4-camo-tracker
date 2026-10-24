@@ -16,7 +16,7 @@ public partial class MainWindow
    int maximum=0;if(!int.TryParse(level.Text,out var value)||value is <1 or >1000||(!string.IsNullOrWhiteSpace(max.Text)&&(!int.TryParse(max.Text,out maximum)||maximum is <1 or >250))){MessageBox.Show(window,"请核对武器等级和满级等级。");return;}
    int prestige=stage.SelectedIndex;if(prestige==0&&maximum>0&&value>maximum){MessageBox.Show(window,"普通武器等级不能超过该武器满级等级，请核对当前阶段。");return;}if(prestige==1&&maximum>0&&value>=maximum)prestige=2;
    tracker.Snapshot();w.Prestige=prestige;w.WeaponLevel=value;w.MaxLevel=maximum;w.LevelKnown=true;
-   foreach(var c in w.Challenges.Where(c=>c.Kind=="military"&&!c.Unlocked)){c.ProgressKnown=true;c.Count=Math.Clamp(value,0,c.Target);if(prestige>0){c.Count=c.Target;c.Unlocked=true;}}
+   foreach(var c in w.Challenges.Where(c=>c.Kind=="military"&&!c.GameRewardOnly&&!c.Unlocked)){c.ProgressKnown=true;c.Count=Math.Clamp(value,0,c.Target);if(prestige>0){c.Count=c.Target;c.Unlocked=true;}}
    foreach(var c in w.Challenges.Where(c=>c.Kind=="prestige"&&!c.Unlocked)){c.Count=0;c.ProgressKnown=false;c.Count=Eligibility.Reason(tracker.Data,w,c)==null?1:0;c.ProgressKnown=true;}
    tracker.Save();window.Close();Render();RefreshJourney();
   },true);panel.Children.Add(save);window.Content=panel;window.ShowDialog();

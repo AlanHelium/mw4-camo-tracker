@@ -80,13 +80,13 @@ public partial class MainWindow
  }
  UIElement TaskActions(bool compact=false)
  {
-  var c=tracker.Current;var panel=new StackPanel();var row=Row(Command(c.Done?"已解锁 ✓":"标记已解锁",MarkCurrentUnlocked,true),Command("局后更新",RecordProgress),Command("↶",Undo));((Button)row.Children[0]).IsEnabled=!c.Done&&Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c)==null;((Button)row.Children[0]).ToolTip=Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c);((Button)row.Children[1]).IsEnabled=c.IsLevelReward||Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c)==null;((Button)row.Children[2]).IsEnabled=tracker.CanUndo;
+  var c=tracker.Current;var panel=new StackPanel();var row=Row(Command(c.Done?"已解锁 ✓":c.GameRewardOnly?"游戏里已解锁":"标记已解锁",MarkCurrentUnlocked,true),Command(c.GameRewardOnly?"前置详情":"局后更新",RecordProgress),Command("↶",Undo));((Button)row.Children[0]).IsEnabled=CanConfirm(tracker.CurrentWeapon,c);((Button)row.Children[0]).ToolTip=Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c);((Button)row.Children[1]).IsEnabled=c.GameRewardOnly||c.IsLevelReward||Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c)==null;((Button)row.Children[2]).IsEnabled=tracker.CanUndo;
   if(compact)foreach(var button in row.Children.OfType<Button>()){button.FontSize=11;button.Padding=new(10,9,10,9);button.Margin=new(0,0,5,0);}panel.Children.Add(row);
   var w=tracker.CurrentWeapon;var today=new CheckBox{Content="今天刷这把",IsChecked=tracker.InSession(w),Foreground=B(Acid),Margin=new(0,11,0,0)};today.Click+=(_,_)=>SetToday(w,today.IsChecked==true);panel.Children.Add(Row(today,Command("武器路线",()=>ShowWeaponJourney(w))));return panel;
  }
  UIElement NumericProgress(Challenge c,double size=36)
  {
-  var row=new Grid();row.ColumnDefinitions.Add(new());row.ColumnDefinitions.Add(new(){Width=GridLength.Auto});Put(row,Figure(c.Done?"已解锁":c.ProgressKnown?c.Count.ToString("D2"):"—",c.Done?24:size));var note=Label(c.IsLevelReward?"等级奖励":c.ProgressKnown?"/ "+c.Target:"未录进度",11,Muted);note.VerticalAlignment=VerticalAlignment.Bottom;note.Margin=new(0,0,0,5);Put(row,note,1);return row;
+  var row=new Grid();row.ColumnDefinitions.Add(new());row.ColumnDefinitions.Add(new(){Width=GridLength.Auto});Put(row,Figure(c.Done?"已解锁":c.GameRewardOnly?"等待游戏解锁":c.ProgressKnown?c.Count.ToString("D2"):"—",c.Done?24:size));var note=Label(c.GameRewardOnly?"游戏进度奖励":c.IsLevelReward?"等级奖励":c.ProgressKnown?"/ "+c.Target:"未录进度",11,Muted);note.VerticalAlignment=VerticalAlignment.Bottom;note.Margin=new(0,0,0,5);Put(row,note,1);return row;
  }
  Grid TacticalBody()
  {

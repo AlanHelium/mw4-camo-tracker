@@ -5,6 +5,8 @@ public class Challenge
  public string EnglishName {get;set;}="";
  public int ProgressRevision {get;set;}=1;
  public string Unit {get;set;}="次";
+ public bool GameRewardOnly {get;set;}
+ public string ReferenceRule {get;set;}="";
  public List<CatalogGate> Gates {get;set;}=[];
  public string Id {get;set;}=Guid.NewGuid().ToString();
  public string CatalogKey {get;set;}="";
@@ -31,7 +33,7 @@ public class Challenge
  public bool LevelGateUnknown {get;set;}
  public bool RequiresPrestigeMax {get;set;}
  public bool RequirementUnverified {get;set;}
- public bool IsLevelReward=>Kind is "military" or "prestige";
+ public bool IsLevelReward=>Kind=="prestige"||Kind=="military"&&!GameRewardOnly;
  public bool Done=>Unlocked||(!RequirementUnverified&&ProgressKnown&&Count>=Target);
 }
 public class Weapon

@@ -53,7 +53,7 @@ static class DataUpdates
    if(w.Category.Length>80||w.Mode.Length>80||w.ChineseName.Length>100||w.EnglishName.Length>100||w.MaxLevel is <0 or >1000||w.Challenges.Select(x=>x.CatalogKey).Distinct().Count()!=w.Challenges.Count)throw new InvalidDataException("武器目录无效。");
    foreach(var c in w.Challenges)
    {
-    if(!Key(c.CatalogKey)||!kinds.Contains(c.Kind)||c.EnglishName.Length>150||c.ChineseName.Length>150||c.SourceRule.Length>2000||c.DmzRule.Length>2000||c.DmzSourceRule.Length>2000||c.Stage.Length>100||c.Unit.Length>30||c.ProgressRevision is <1 or >10000||c.RequiredPrestige is <0 or >2||c.RequiredLevel is <0 or >1000||c.RequiredWeaponLevel is <0 or >1000||c.Gates.Count>20||c.Gates.Any(g=>!new[]{"self","category","all"}.Contains(g.Scope)||g.Count is <0 or >10000||g.Label.Length>100||(g.ChallengeKey.Length==0?!kinds.Contains(g.Kind):!Key(g.ChallengeKey))))throw new InvalidDataException("挑战条件需要新版程序或内容无效。");
+    if(!Key(c.CatalogKey)||!kinds.Contains(c.Kind)||c.EnglishName.Length>150||c.ChineseName.Length>150||c.SourceRule.Length>2000||c.DmzRule.Length>2000||c.DmzSourceRule.Length>2000||c.Stage.Length>100||c.Unit.Length>30||c.ReferenceRule.Length>2000||c.GameRewardOnly&&c.Kind!="military"||c.ProgressRevision is <1 or >10000||c.RequiredPrestige is <0 or >2||c.RequiredLevel is <0 or >1000||c.RequiredWeaponLevel is <0 or >1000||c.Gates.Count>20||c.Gates.Any(g=>!new[]{"self","category","all"}.Contains(g.Scope)||g.Count is <0 or >10000||g.Label.Length>100||(g.ChallengeKey.Length==0?!kinds.Contains(g.Kind):!Key(g.ChallengeKey))))throw new InvalidDataException("挑战条件需要新版程序或内容无效。");
     if(c.Count!=0||c.ProgressKnown||c.Unlocked||c.OpenConfirmed)throw new InvalidDataException("资料包不能包含玩家进度。");
    }
   }

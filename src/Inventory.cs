@@ -9,20 +9,18 @@ public partial class MainWindow
  void SetToday(Weapon w,bool selected){try{tracker.SetSession(w,selected);}catch(InvalidOperationException e){MessageBox.Show(e.Message,"今日计划");}Render();}
  void MarkCurrentUnlocked()
  {
-  if(mini is {IsVisible:true})
-  {
-   if(expandedWeaponId.Length>0){var viewed=tracker.Data.Weapons.FirstOrDefault(w=>w.Id==expandedWeaponId);var goal=viewed?.Challenges.FirstOrDefault(c=>c.Id==journeyChallengeId);if(viewed==null||goal==null)return;tracker.Data.SelectedWeapon=viewed.Id;tracker.Data.SelectedChallenge=goal.Id;}
-   else{if(OverlayRows().Count==0)return;EnsureOverlaySelection();}
-  }
-  var w=tracker.CurrentWeapon;var c=tracker.Current;if(c.Done)return;if(Eligibility.Reason(tracker.Data,w,c) is {} reason){MessageBox.Show(reason,"还未满足前置");return;}tracker.CompleteRun(w,c);
-  var next=Recommendations.ForWeapon(tracker.Data,w);if(next!=null){tracker.Data.SelectedChallenge=next.Id;if(expandedWeaponId==w.Id)journeyChallengeId=next.Id;}tracker.Save();Render();RefreshJourney();ShowUnlockToast(w,c);
+  if(mini is {IsVisible:true}&&!HudHasTarget)return;
+  var w=tracker.CurrentWeapon;var c=tracker.Current;if(c.Done)return;
+  if(c.GameRewardOnly)tracker.ConfirmGameReward(w,c);
+  else{if(Eligibility.Reason(tracker.Data,w,c) is {} reason){MessageBox.Show(reason,"还未满足前置");return;}tracker.CompleteRun(w,c);}
+  var next=Recommendations.ForWeapon(tracker.Data,w);if(next!=null){tracker.Data.SelectedChallenge=next.Id;journeyChallengeId=next.Id;}tracker.Save();Render();RefreshJourney();ShowUnlockToast(w,c);
  }
  void RecordProgress()
  {
-  var c=tracker.Current;if(c.IsLevelReward){RecordLevels();return;}if(Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c) is {} reason){MessageBox.Show(reason,"还未满足前置");return;}
+  var c=tracker.Current;if(c.GameRewardOnly){ShowChallengeDetails(tracker.CurrentWeapon,c);return;}if(c.IsLevelReward){RecordLevels();return;}if(Eligibility.Reason(tracker.Data,tracker.CurrentWeapon,c) is {} reason){MessageBox.Show(reason,"还未满足前置");return;}
   var values=Form("局后更新",[("游戏内当前总进度",c.ProgressKnown?c.Count.ToString():"")]);if(values==null)return;
   if(!int.TryParse(values[0],out var count)||count<0||count>c.Target){MessageBox.Show($"请输入 0 到 {c.Target} 之间的进度。未知进度可不填写。");return;}
-  bool wasDone=c.Done;var w=tracker.CurrentWeapon;tracker.RecordRunTotal(w,c,count);Render();if(!wasDone&&c.Done)ShowUnlockToast(w,c);
+  bool wasDone=c.Done;var w=tracker.CurrentWeapon;tracker.RecordRunTotal(w,c,count);if(!wasDone&&c.Done)SetJourneyNext(w,c);Render();if(!wasDone&&c.Done)ShowUnlockToast(w,c);
  }
  void ShowInventory()=>FromOverlay(()=>CreateInventoryWindow().ShowDialog());
  Window CreateInventoryWindow()
@@ -55,7 +53,7 @@ public partial class MainWindow
     if(group.All(c=>c.Kind=="military"))
     {
      var all=Command("这些军事迷彩均已解锁",()=>{tracker.MarkUnlocked(active,group.Last(),true);ListWeapons();Detail();Render();});all.FontSize=11;all.Margin=new(0,0,0,8);details.Children.Add(all);
-     var tiles=new WrapPanel();foreach(var c in group){var check=new CheckBox{Content="Lv."+c.RequiredWeaponLevel,IsChecked=c.Done,Foreground=B(White),Width=100,Margin=new(0,6,0,6),ToolTip=c.Name};check.Click+=(_,_)=>{tracker.MarkUnlocked(active,c,check.IsChecked==true);ListWeapons();Detail();Render();};tiles.Children.Add(check);}details.Children.Add(tiles);continue;
+     var tiles=new WrapPanel();foreach(var c in group){var check=new CheckBox{Content=c.GameRewardOnly?NodeName(c):"Lv."+c.RequiredWeaponLevel,IsChecked=c.Done,Foreground=B(White),Width=100,Margin=new(0,6,0,6),ToolTip=c.Name};check.Click+=(_,_)=>{tracker.MarkUnlocked(active,c,check.IsChecked==true);ListWeapons();Detail();Render();};tiles.Children.Add(check);}details.Children.Add(tiles);continue;
     }
     foreach(var c in group)
     {
@@ -78,7 +76,7 @@ public partial class MainWindow
  }
  void ShowChallengeDetails(Weapon w,Challenge c)
  {
-  var details=Bilingual.WeaponZh(w)+" / "+Bilingual.WeaponEn(w)+"\n\n"+Bilingual.Rule(c)+"\n\n前置："+(Eligibility.Reason(tracker.Data,w,c)??"已满足当前记录的前置条件")+(string.IsNullOrEmpty(c.DmzRule)?"":"\n\nDMZ 条件参考："+c.DmzRule+"\n"+c.DmzSourceRule)+"\n\n资料来源："+c.Source+"\n\n特殊迷彩中文名为参考翻译，英文原名用于游戏内对照。";
+  var details=Bilingual.WeaponZh(w)+" / "+Bilingual.WeaponEn(w)+"\n\n"+Bilingual.Rule(c)+"\n\n前置："+(Eligibility.Reason(tracker.Data,w,c)??"已满足当前记录的前置条件")+(string.IsNullOrEmpty(c.DmzRule)?"":"\n\nDMZ 条件参考："+c.DmzRule+"\n"+c.DmzSourceRule)+(c.ReferenceRule.Length>0?"\n\n参考资料（不作为当前前置判定）："+c.ReferenceRule:"")+"\n\n资料来源："+c.Source+"\n\n特殊迷彩中文名为参考翻译，英文原名用于游戏内对照。";
   MessageBox.Show(details,Bilingual.Camo(c));
  }
 }
